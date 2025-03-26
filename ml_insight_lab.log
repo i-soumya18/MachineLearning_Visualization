@@ -1,0 +1,336 @@
+2025-03-26 14:07:14,292 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:07:14,293 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:14] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:23,560 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:07:23,561 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:23] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:33,234 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:34,022 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:34,261 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:34,401 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:34,455 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:34] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:35,520 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:35,569 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:38,417 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:38,431 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:38] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:38,709 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:38,726 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:38] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:39,807 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:39,835 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:39] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:39,876 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:39,891 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:39] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:07:46,328 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:07:47,502 - INFO - Decision Tree completed with depth=3, classification=False
+2025-03-26 14:07:47,523 - INFO - 127.0.0.1 - - [26/Mar/2025 14:07:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:08:00,154 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:08:01,136 - INFO - Decision Tree completed with depth=3, classification=True
+2025-03-26 14:08:01,144 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:01] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:08:36,674 - INFO - Encoded categorical labels for logistic
+2025-03-26 14:08:36,674 - ERROR - Fit endpoint error: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-03-26 14:08:36,674 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:36] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:08:47,646 - INFO - Linear Regression completed: m=0.668360428045381, b=0.12032667528267924
+2025-03-26 14:08:47,646 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:08:49,991 - INFO - Linear Regression completed: m=0.668360428045381, b=0.12032667528267924
+2025-03-26 14:08:49,992 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:49] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:08:59,766 - INFO - Linear Regression completed: m=0.668360428045381, b=0.12032667528267924
+2025-03-26 14:08:59,766 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:59] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:09:19,327 - INFO - Linear Regression completed: m=0.2668208159597706, b=1.7506569257043774
+2025-03-26 14:09:19,328 - INFO - 127.0.0.1 - - [26/Mar/2025 14:09:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:09:25,184 - INFO - Iris scenario loaded
+2025-03-26 14:09:25,185 - INFO - 127.0.0.1 - - [26/Mar/2025 14:09:25] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 14:10:13,914 - INFO - Linear Regression completed: m=0.668360428045381, b=0.12032667528267924
+2025-03-26 14:10:13,914 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:13] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:13,923 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:13,923 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:13] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:17,814 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:17,815 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:17] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:17,819 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:17,820 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:17] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:18,442 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:18,443 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:18] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:18,449 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:18,449 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:18] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:18,702 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:18,702 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:18] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:18,707 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:18,708 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:18] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,111 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:19,112 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,117 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:19,118 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,286 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:19,286 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,291 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:19,292 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,471 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:19,472 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,477 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:19,477 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,693 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:19,693 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,698 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:19,699 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,853 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:19,854 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:19,859 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:19,859 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:20,023 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:20,023 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:20,029 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:20,029 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:20,236 - INFO - Linear Regression completed: m=0.933966235143136, b=0.930074110651443
+2025-03-26 14:10:20,237 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:10:20,242 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:10:20,242 - INFO - 127.0.0.1 - - [26/Mar/2025 14:10:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:34:57,539 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:34:57,539 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:35:13,168 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:35:13,169 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:35:16,597 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:16] "GET / HTTP/1.1" 200 -
+2025-03-26 14:35:16,683 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:16] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 14:35:16,684 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:16] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-26 14:35:16,699 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 14:35:46,633 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:35:46,633 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:35:46,833 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:46] "GET / HTTP/1.1" 200 -
+2025-03-26 14:35:46,911 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:46] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 14:35:46,912 - INFO - 127.0.0.1 - - [26/Mar/2025 14:35:46] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:36:54,287 - INFO - 127.0.0.1 - - [26/Mar/2025 14:36:54] "GET / HTTP/1.1" 200 -
+2025-03-26 14:36:54,331 - INFO - 127.0.0.1 - - [26/Mar/2025 14:36:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 14:36:54,334 - INFO - 127.0.0.1 - - [26/Mar/2025 14:36:54] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:37:00,383 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:00] "GET / HTTP/1.1" 200 -
+2025-03-26 14:37:00,414 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 14:37:00,417 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:00] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:37:00,982 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:00] "GET / HTTP/1.1" 200 -
+2025-03-26 14:37:01,001 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 14:37:01,003 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:01] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:37:31,828 - ERROR - Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:37:31,828 - ERROR - Fit endpoint error: Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:37:31,828 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:31] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:37:56,165 - INFO - Encoded categorical labels for dtree
+2025-03-26 14:37:56,330 - INFO - Decision Tree completed: depth=3, classification=False
+2025-03-26 14:37:56,332 - INFO - 127.0.0.1 - - [26/Mar/2025 14:37:56] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:38:11,016 - INFO - 127.0.0.1 - - [26/Mar/2025 14:38:11] "GET / HTTP/1.1" 200 -
+2025-03-26 14:38:11,045 - INFO - 127.0.0.1 - - [26/Mar/2025 14:38:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 14:38:11,047 - INFO - 127.0.0.1 - - [26/Mar/2025 14:38:11] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:42:12,742 - ERROR - Decision Tree failed: This DecisionTreeRegressor estimator requires y to be passed, but the target y is None.
+2025-03-26 14:42:12,742 - ERROR - Fit endpoint error: Decision Tree failed: This DecisionTreeRegressor estimator requires y to be passed, but the target y is None.
+2025-03-26 14:42:12,743 - INFO - 127.0.0.1 - - [26/Mar/2025 14:42:12] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:42:22,698 - ERROR - Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:42:22,698 - ERROR - Fit endpoint error: Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:42:22,698 - INFO - 127.0.0.1 - - [26/Mar/2025 14:42:22] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:42:38,512 - ERROR - Iris dataset not found
+2025-03-26 14:42:38,512 - INFO - 127.0.0.1 - - [26/Mar/2025 14:42:38] "[35m[1mGET /scenario HTTP/1.1[0m" 500 -
+2025-03-26 14:44:44,522 - ERROR - Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:44:44,522 - ERROR - Fit endpoint error: Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:44:44,522 - INFO - 127.0.0.1 - - [26/Mar/2025 14:44:44] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:45:11,141 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:45:11,141 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:45:13,865 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:13] "GET / HTTP/1.1" 200 -
+2025-03-26 14:45:13,947 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:13] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:45:13,948 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:13] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 14:45:13,960 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:13] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 14:45:21,238 - INFO - Iris scenario loaded
+2025-03-26 14:45:21,238 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:21] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 14:45:26,262 - INFO - K-Means completed with 2 clusters
+2025-03-26 14:45:26,262 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:26] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:45:33,443 - ERROR - Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:45:33,443 - ERROR - Fit endpoint error: Linear Regression failed: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-26 14:45:33,443 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:33] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:45:37,200 - INFO - Encoded categorical labels for logistic
+2025-03-26 14:45:37,201 - ERROR - Logistic Regression failed: This solver needs samples of at least 2 classes in the data, but the data contains only one class: np.int64(0)
+2025-03-26 14:45:37,201 - ERROR - Fit endpoint error: Logistic Regression failed: This solver needs samples of at least 2 classes in the data, but the data contains only one class: np.int64(0)
+2025-03-26 14:45:37,201 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:37] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 14:45:41,887 - INFO - Encoded categorical labels for rf
+2025-03-26 14:45:43,421 - INFO - Random Forest completed: depth=3, classification=False
+2025-03-26 14:45:43,424 - INFO - 127.0.0.1 - - [26/Mar/2025 14:45:43] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:46:09,780 - INFO - Encoded categorical labels for rf
+2025-03-26 14:46:11,333 - INFO - Random Forest completed: depth=5, classification=False
+2025-03-26 14:46:11,336 - INFO - 127.0.0.1 - - [26/Mar/2025 14:46:11] "POST /fit HTTP/1.1" 200 -
+2025-03-26 14:46:56,005 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:46:56,006 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:46:56,092 - INFO - 127.0.0.1 - - [26/Mar/2025 14:46:56] "GET / HTTP/1.1" 200 -
+2025-03-26 14:46:56,173 - INFO - 127.0.0.1 - - [26/Mar/2025 14:46:56] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 14:46:56,175 - INFO - 127.0.0.1 - - [26/Mar/2025 14:46:56] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:49:33,527 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 14:49:33,527 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:49:40,843 - INFO - 127.0.0.1 - - [26/Mar/2025 14:49:40] "GET / HTTP/1.1" 200 -
+2025-03-26 14:49:40,949 - INFO - 127.0.0.1 - - [26/Mar/2025 14:49:40] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 14:49:40,975 - INFO - 127.0.0.1 - - [26/Mar/2025 14:49:40] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 14:49:40,984 - INFO - 127.0.0.1 - - [26/Mar/2025 14:49:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 15:08:12,237 - INFO - 127.0.0.1 - - [26/Mar/2025 15:08:12] "GET / HTTP/1.1" 200 -
+2025-03-26 15:08:12,268 - INFO - 127.0.0.1 - - [26/Mar/2025 15:08:12] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 15:08:12,313 - INFO - 127.0.0.1 - - [26/Mar/2025 15:08:12] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 15:08:12,336 - INFO - 127.0.0.1 - - [26/Mar/2025 15:08:12] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 18:44:57,012 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 18:44:57,013 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 18:45:21,376 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:21] "GET / HTTP/1.1" 200 -
+2025-03-26 18:45:21,527 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:21] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 18:45:21,550 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:21] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 18:45:21,735 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 18:45:49,011 - INFO - Iris scenario loaded
+2025-03-26 18:45:49,011 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:49] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 18:45:51,263 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:45:51,264 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:51] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:45:52,582 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:45:52,582 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:52] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:45:56,014 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:45:56,015 - INFO - 127.0.0.1 - - [26/Mar/2025 18:45:56] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:46:20,377 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:46:20,379 - INFO - 127.0.0.1 - - [26/Mar/2025 18:46:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:50:23,408 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:23] "GET / HTTP/1.1" 200 -
+2025-03-26 18:50:23,444 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:23] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 18:50:23,462 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:23] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 18:50:23,509 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:23] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 18:50:39,714 - INFO - Iris scenario loaded
+2025-03-26 18:50:39,715 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:39] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 18:50:41,792 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:50:41,793 - INFO - 127.0.0.1 - - [26/Mar/2025 18:50:41] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:55:30,501 - INFO - Linear Regression completed
+2025-03-26 18:55:30,502 - INFO - 127.0.0.1 - - [26/Mar/2025 18:55:30] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:56:38,091 - INFO - Linear Regression completed
+2025-03-26 18:56:38,093 - INFO - 127.0.0.1 - - [26/Mar/2025 18:56:38] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:57:45,028 - INFO - Encoded categorical labels for rf
+2025-03-26 18:57:47,843 - INFO - Random Forest completed: depth=3, classification=False
+2025-03-26 18:57:47,848 - INFO - 127.0.0.1 - - [26/Mar/2025 18:57:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:58:03,725 - INFO - Encoded categorical labels for rf
+2025-03-26 18:58:08,602 - INFO - Random Forest completed: depth=3, classification=False
+2025-03-26 18:58:08,613 - INFO - 127.0.0.1 - - [26/Mar/2025 18:58:08] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:58:33,149 - INFO - Encoded categorical labels for rf
+2025-03-26 18:58:38,444 - INFO - Random Forest completed: depth=3, classification=False
+2025-03-26 18:58:38,456 - INFO - 127.0.0.1 - - [26/Mar/2025 18:58:38] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:58:54,857 - INFO - K-Means completed with 2 clusters
+2025-03-26 18:58:54,863 - INFO - 127.0.0.1 - - [26/Mar/2025 18:58:54] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:59:12,789 - INFO - PCA completed with 2 components
+2025-03-26 18:59:12,795 - INFO - 127.0.0.1 - - [26/Mar/2025 18:59:12] "POST /fit HTTP/1.1" 200 -
+2025-03-26 18:59:26,432 - INFO - Encoded categorical labels for svm
+2025-03-26 18:59:28,080 - INFO - SVM completed: classification=False
+2025-03-26 18:59:28,090 - INFO - 127.0.0.1 - - [26/Mar/2025 18:59:28] "POST /fit HTTP/1.1" 200 -
+2025-03-26 19:27:35,891 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 19:27:35,891 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 19:30:26,458 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 19:30:26,459 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 19:30:30,388 - INFO - 127.0.0.1 - - [26/Mar/2025 19:30:30] "GET / HTTP/1.1" 200 -
+2025-03-26 19:30:30,530 - INFO - 127.0.0.1 - - [26/Mar/2025 19:30:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 19:30:30,568 - INFO - 127.0.0.1 - - [26/Mar/2025 19:30:30] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-26 19:30:30,586 - INFO - 127.0.0.1 - - [26/Mar/2025 19:30:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 19:30:57,498 - ERROR - Iris dataset not found
+2025-03-26 19:30:57,498 - INFO - 127.0.0.1 - - [26/Mar/2025 19:30:57] "[35m[1mGET /scenario HTTP/1.1[0m" 500 -
+2025-03-26 19:31:17,266 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 19:31:17,267 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 19:31:20,109 - INFO - 127.0.0.1 - - [26/Mar/2025 19:31:20] "GET / HTTP/1.1" 200 -
+2025-03-26 19:31:20,221 - INFO - 127.0.0.1 - - [26/Mar/2025 19:31:20] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 19:31:20,223 - INFO - 127.0.0.1 - - [26/Mar/2025 19:31:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 19:31:25,074 - INFO - Iris scenario loaded
+2025-03-26 19:31:25,074 - INFO - 127.0.0.1 - - [26/Mar/2025 19:31:25] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 19:32:29,701 - ERROR - Fit endpoint error: This SVR estimator requires y to be passed, but the target y is None.
+2025-03-26 19:32:29,702 - INFO - 127.0.0.1 - - [26/Mar/2025 19:32:29] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-26 19:47:23,985 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 19:47:23,985 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 19:48:03,440 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:03] "GET / HTTP/1.1" 200 -
+2025-03-26 19:48:03,590 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:03] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 19:48:03,594 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:03] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-26 19:48:04,204 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 19:48:26,248 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 19:48:26,249 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 19:48:29,873 - INFO - Iris scenario loaded
+2025-03-26 19:48:29,874 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:29] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 19:48:57,414 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:57] "GET / HTTP/1.1" 200 -
+2025-03-26 19:48:57,533 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:57] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 19:48:57,534 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:57] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-26 19:48:57,921 - INFO - 127.0.0.1 - - [26/Mar/2025 19:48:57] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 20:05:55,694 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 20:05:55,694 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 20:06:01,090 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:01] "GET / HTTP/1.1" 200 -
+2025-03-26 20:06:01,197 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 20:06:01,221 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:01] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-26 20:06:01,377 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-26 20:06:06,790 - INFO - Iris scenario loaded
+2025-03-26 20:06:06,791 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:06] "GET /scenario HTTP/1.1" 200 -
+2025-03-26 20:06:17,666 - INFO - K-Means: Silhouette=0.5837627769152419
+2025-03-26 20:06:17,667 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:17] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:06:50,995 - INFO - K-Means: Silhouette=0.5837627769152419
+2025-03-26 20:06:50,995 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:50] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:06:56,861 - ERROR - Grid search error: Parameter grid for parameter 'is_classification' needs to be a list or a numpy array, but got False (of type bool) instead. Single values need to be wrapped in a list with one element.
+2025-03-26 20:06:56,861 - INFO - 127.0.0.1 - - [26/Mar/2025 20:06:56] "[35m[1mPOST /grid_search HTTP/1.1[0m" 500 -
+2025-03-26 20:07:33,920 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625}
+2025-03-26 20:07:33,920 - INFO - 127.0.0.1 - - [26/Mar/2025 20:07:33] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:07:53,534 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625}
+2025-03-26 20:07:53,535 - INFO - 127.0.0.1 - - [26/Mar/2025 20:07:53] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:08:54,987 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625, 'cv_mse': np.float64(712350540794.1754), 'cv_r2': np.float64(0.3968941948701475)}
+2025-03-26 20:08:54,988 - INFO - 127.0.0.1 - - [26/Mar/2025 20:08:54] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:08:56,767 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625, 'cv_mse': np.float64(712350540794.1754), 'cv_r2': np.float64(0.3968941948701475)}
+2025-03-26 20:08:56,768 - INFO - 127.0.0.1 - - [26/Mar/2025 20:08:56] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:09:03,352 - INFO - Encoded categorical labels for rf
+2025-03-26 20:09:05,605 - INFO - Random Forest: {'r2': 0.22100566491161033, 'cv_mse': np.float64(39812.67757943556), 'cv_r2': np.float64(0.1970316212843841)}
+2025-03-26 20:09:05,608 - INFO - 127.0.0.1 - - [26/Mar/2025 20:09:05] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:09:05,840 - INFO - Encoded categorical labels for rf
+2025-03-26 20:09:07,891 - INFO - Random Forest: {'r2': 0.2163440913542416, 'cv_mse': np.float64(39904.63228405111), 'cv_r2': np.float64(0.19480083903474482)}
+2025-03-26 20:09:07,896 - INFO - 127.0.0.1 - - [26/Mar/2025 20:09:07] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:09:52,290 - INFO - K-Means: Silhouette=0.6099669491052099
+2025-03-26 20:09:52,292 - INFO - 127.0.0.1 - - [26/Mar/2025 20:09:52] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:09:56,884 - INFO - K-Means: Silhouette=0.6099669491052099
+2025-03-26 20:09:56,886 - INFO - 127.0.0.1 - - [26/Mar/2025 20:09:56] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:02,243 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625, 'cv_mse': np.float64(712350540794.1754), 'cv_r2': np.float64(0.3968941948701475)}
+2025-03-26 20:11:02,243 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:02] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:02,254 - INFO - Encoded categorical labels for logistic
+2025-03-26 20:11:19,762 - INFO - Logistic Regression: {'accuracy': 0.016865079365079364, 'cv_accuracy': np.float64(0.008435496155074565)}
+2025-03-26 20:11:19,762 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:19] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:19,774 - INFO - Encoded categorical labels for dtree
+2025-03-26 20:11:20,048 - INFO - Decision Tree: {'r2': 0.20921219300121263, 'cv_mse': np.float64(40393.18361994032), 'cv_r2': np.float64(0.18453668175407806)}
+2025-03-26 20:11:20,052 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:20] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:20,063 - INFO - Encoded categorical labels for rf
+2025-03-26 20:11:20,582 - INFO - Encoded categorical labels for dtree
+2025-03-26 20:11:21,144 - INFO - Decision Tree: {'r2': 0.20921219300121263, 'cv_mse': np.float64(40393.18361994032), 'cv_r2': np.float64(0.18453668175407806)}
+2025-03-26 20:11:21,148 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:21] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:23,097 - INFO - Random Forest: {'r2': 0.21866449798277587, 'cv_mse': np.float64(39953.0411553386), 'cv_r2': np.float64(0.19391553284700125)}
+2025-03-26 20:11:23,102 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:23] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:23,117 - INFO - Encoded categorical labels for svm
+2025-03-26 20:11:25,010 - INFO - SVM: {'r2': 0.1394727585155211, 'cv_mse': np.float64(43200.64742066884), 'cv_r2': np.float64(0.12727458497491648)}
+2025-03-26 20:11:25,015 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:25] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:25,135 - INFO - K-Means: Silhouette=0.6088605860284053
+2025-03-26 20:11:25,137 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:25] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:25,237 - INFO - DBSCAN: Silhouette=-0.7124034931095574
+2025-03-26 20:11:25,238 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:25] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:25,246 - INFO - PCA: Variance=[0.9999985908137399, 9.14205629051297e-07]
+2025-03-26 20:11:25,250 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:25] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:26,193 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625, 'cv_mse': np.float64(712350540794.1754), 'cv_r2': np.float64(0.3968941948701475)}
+2025-03-26 20:11:26,194 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:26] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:26,202 - INFO - Encoded categorical labels for logistic
+2025-03-26 20:11:43,694 - INFO - Logistic Regression: {'accuracy': 0.016865079365079364, 'cv_accuracy': np.float64(0.008435496155074565)}
+2025-03-26 20:11:43,696 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:43] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:43,706 - INFO - Encoded categorical labels for dtree
+2025-03-26 20:11:43,970 - INFO - Decision Tree: {'r2': 0.20921219300121263, 'cv_mse': np.float64(40393.18361994032), 'cv_r2': np.float64(0.18453668175407806)}
+2025-03-26 20:11:43,976 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:43] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:43,986 - INFO - Encoded categorical labels for rf
+2025-03-26 20:11:45,865 - INFO - Random Forest: {'r2': 0.21876054446866777, 'cv_mse': np.float64(40232.271896571256), 'cv_r2': np.float64(0.1882897421877497)}
+2025-03-26 20:11:45,868 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:45] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:45,877 - INFO - Encoded categorical labels for svm
+2025-03-26 20:11:47,358 - INFO - SVM: {'r2': 0.1394727585155211, 'cv_mse': np.float64(43200.64742066884), 'cv_r2': np.float64(0.12727458497491648)}
+2025-03-26 20:11:47,362 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:47,465 - INFO - K-Means: Silhouette=0.6099669491052099
+2025-03-26 20:11:47,467 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:47,555 - INFO - DBSCAN: Silhouette=-0.7124034931095574
+2025-03-26 20:11:47,555 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:11:47,563 - INFO - PCA: Variance=[0.9999985908137399, 9.14205629051297e-07]
+2025-03-26 20:11:47,566 - INFO - 127.0.0.1 - - [26/Mar/2025 20:11:47] "POST /fit HTTP/1.1" 200 -
+2025-03-26 20:14:09,900 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-26 20:14:09,900 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 20:14:14,056 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:14] "GET / HTTP/1.1" 200 -
+2025-03-26 20:14:14,135 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 20:14:14,137 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:14] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-26 20:14:15,512 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:15] "GET / HTTP/1.1" 200 -
+2025-03-26 20:14:15,532 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:15] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-26 20:14:15,533 - INFO - 127.0.0.1 - - [26/Mar/2025 20:14:15] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
