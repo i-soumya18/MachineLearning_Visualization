@@ -14,6 +14,8 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import mean_squared_error, accuracy_score, r2_score, silhouette_score
 from sklearn.model_selection import KFold, GridSearchCV
 
+os.environ['LOKY_MAX_CPU_COUNT'] = '4'  # Adjust based on your CPU cores, e.g., '4' for quad-core
+
 app = Flask(__name__)
 
 logging.basicConfig(filename='ml_insight_lab.log', level=logging.INFO,
