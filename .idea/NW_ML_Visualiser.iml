@@ -10,6 +10,7 @@
     <orderEntry type="library" name="d3.v7" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="plotly-latest" level="application" />
+    <orderEntry type="library" name="prism" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="versionSpecifier" value="Don't specify version" />

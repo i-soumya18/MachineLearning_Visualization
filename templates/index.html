@@ -8,26 +8,22 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col">
-    <div class="container mx-auto px-4 py-8">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-4">
-                ML Insight Lab
-            </h1>
-            <p class="text-gray-400 max-w-2xl mx-auto">
-                Advanced Machine Learning Exploration
-            </p>
+<body>
+    <div class="container">
+        <header>
+            <h1>ML Insight Lab</h1>
+            <p>Advanced Machine Learning Exploration</p>
         </header>
 
-        <div class="bg-gray-800 shadow-xl rounded-xl p-6 mb-6 border border-gray-700">
-            <div class="grid md:grid-cols-3 gap-4 items-center">
+        <div class="control-panel">
+            <div class="control-grid">
                 <div>
-                    <label for="algo" class="block text-sm font-medium text-gray-300 mb-2">
-                        <i class="fas fa-project-diagram mr-2"></i>Algorithm
-                    </label>
-                    <select id="algo" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200">
+                    <label for="algo"><i class="fas fa-project-diagram"></i> Algorithm</label>
+                    <select id="algo">
                         <optgroup label="Supervised">
                             <option value="linear">Linear Regression</option>
                             <option value="logistic">Logistic Regression</option>
@@ -43,209 +39,179 @@
                     </select>
                 </div>
 
-                <div class="flex space-x-4 items-center">
-                    <div>
-                        <input type="file" id="upload" accept=".csv" class="hidden" />
-                        <label for="upload" class="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition flex items-center">
-                            <i class="fas fa-upload mr-2"></i>Upload CSV
-                        </label>
-                    </div>
-                    <button onclick="generateRandomData()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition flex items-center">
-                        <i class="fas fa-random mr-2"></i>Random Data
-                    </button>
-                    <button onclick="loadScenario()" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition flex items-center">
-                        <i class="fas fa-leaf mr-2"></i>Iris Scenario
-                    </button>
+                <div class="button-group">
+                    <input type="file" id="upload" accept=".csv" class="hidden" />
+                    <label for="upload"><i class="fas fa-upload"></i> Upload CSV</label>
+                    <button onclick="generateRandomData()"><i class="fas fa-random"></i> Random Data</button>
+                    <button onclick="loadScenario()"><i class="fas fa-leaf"></i> Iris Scenario</button>
                 </div>
 
-                <div class="flex space-x-4 items-center justify-end">
-                    <button onclick="fitModel()" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition flex items-center">
-                        <i class="fas fa-play-circle mr-2"></i>Run Algorithm
-                    </button>
-                    <button onclick="compareAlgorithms()" class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition flex items-center">
-                        <i class="fas fa-balance-scale mr-2"></i>Compare
-                    </button>
-                    <button onclick="reset()" class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition flex items-center">
-                        <i class="fas fa-undo mr-2"></i>Reset
-                    </button>
+                <div class="button-group right">
+                    <button onclick="fitModel()"><i class="fas fa-play-circle"></i> Run Algorithm</button>
+                    <button onclick="compareAlgorithms()"><i class="fas fa-balance-scale"></i> Compare</button>
+                    <button onclick="reset()"><i class="fas fa-undo"></i> Reset</button>
                 </div>
             </div>
 
-            <div id="input-config" class="mt-4 grid md:grid-cols-4 gap-4">
+            <div id="input-config">
                 <div>
-                    <label for="num-inputs" class="block text-sm font-medium text-gray-300">Number of Inputs:</label>
-                    <input type="number" id="num-inputs" min="1" max="10" value="2" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200">
+                    <label for="num-inputs">Number of Inputs:</label>
+                    <input type="number" id="num-inputs" min="1" max="10" value="2">
                 </div>
                 <div>
-                    <label for="label-col" class="block text-sm font-medium text-gray-300">Label Column:</label>
-                    <select id="label-col" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200">
+                    <label for="label-col">Label Column:</label>
+                    <select id="label-col">
                         <option value="">None</option>
                     </select>
                 </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="normalize" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded">
-                    <label for="normalize" class="ml-2 block text-sm text-gray-300">Normalize Data</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="normalize">
+                    <label for="normalize">Normalize Data</label>
                 </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="cv" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded">
-                    <label for="cv" class="ml-2 block text-sm text-gray-300">Cross-Validation</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cv">
+                    <label for="cv">Cross-Validation</label>
                 </div>
             </div>
-            <div id="input-selectors" class="mt-4 grid gap-4"></div>
+            <div id="input-selectors"></div>
 
-            <div class="mt-4 grid md:grid-cols-2 gap-4">
+            <div class="viz-config">
                 <div>
-                    <label for="viz-type" class="block text-sm font-medium text-gray-300 mb-2">
-                        <i class="fas fa-chart-line mr-2"></i>Visualization Type
-                    </label>
-                    <select id="viz-type" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200">
+                    <label for="viz-type"><i class="fas fa-chart-line"></i> Visualization Type</label>
+                    <select id="viz-type">
                         <option value="scatter">2D Scatter</option>
                         <option value="line">Line</option>
                         <option value="bar">Bar</option>
                         <option value="scatter3d">3D Scatter</option>
                     </select>
                 </div>
-                <div class="text-sm text-gray-300">
+                <div class="status">
                     <p id="data-status">Data Status: No data loaded</p>
                     <p id="algo-status">Algorithm Status: Not running</p>
                 </div>
             </div>
 
-            <div class="mt-4">
-                <button onclick="runGridSearch()" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition flex items-center">
-                    <i class="fas fa-search mr-2"></i>Run Grid Search
-                </button>
+            <div>
+                <button onclick="runGridSearch()"><i class="fas fa-search"></i> Run Grid Search</button>
             </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="md:col-span-2 bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-200">Visualization</h2>
-                    <div class="space-x-2">
-                        <button onclick="stepThrough()" id="step-btn" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition disabled:opacity-50" disabled>
-                            <i class="fas fa-step-forward mr-2"></i>Next Step
-                        </button>
-                        <button onclick="downloadViz()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
-                            <i class="fas fa-download mr-2"></i>Download SVG
-                        </button>
-                        <button onclick="exportResults()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                            <i class="fas fa-file-export mr-2"></i>Export Results
-                        </button>
+        <div class="main-grid">
+            <div class="visualization-panel">
+                <div class="panel-header">
+                    <h2>Visualization</h2>
+                    <div class="button-group">
+                        <button onclick="stepThrough()" id="step-btn" disabled><i class="fas fa-step-forward"></i> Next Step</button>
+                        <button onclick="downloadViz()"><i class="fas fa-download"></i> Download SVG</button>
+                        <button onclick="exportResults()"><i class="fas fa-file-export"></i> Export Results</button>
                     </div>
                 </div>
-                <svg id="visualization" class="w-full h-96 border-2 border-gray-600 rounded-md hidden" viewBox="0 0 600 400"></svg>
-                <div id="plotly-viz" class="w-full h-96 border-2 border-gray-600 rounded-md hidden"></div>
+                <svg id="visualization" viewBox="0 0 600 400" class="hidden"></svg>
+                <div id="plotly-viz" class="hidden"></div>
             </div>
 
-            <div class="space-y-6">
-                <div class="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                        <i class="fas fa-sliders-h mr-2"></i>Algorithm Parameters
-                    </h3>
-                    <div class="space-y-4">
+            <div class="side-panels">
+                <div class="params-panel">
+                    <h3><i class="fas fa-sliders-h"></i> Algorithm Parameters</h3>
+                    <div>
                         <div id="lr-params">
-                            <label for="lr" class="block text-sm font-medium text-gray-300 mb-2">
-                                Learning Rate: <span id="lr-value" class="text-indigo-400">0.01</span>
-                            </label>
-                            <input type="range" id="lr" min="0.001" max="0.1" step="0.001" value="0.01"
-                                class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer" oninput="updateParameter('lr')">
+                            <label for="lr">Learning Rate: <span id="lr-value">0.01</span></label>
+                            <input type="range" id="lr" min="0.001" max="0.1" step="0.001" value="0.01" oninput="updateParameter('lr')">
                         </div>
                         <div id="k-params" class="hidden">
-                            <label for="k" class="block text-sm font-medium text-gray-300 mb-2">
-                                Clusters: <span id="k-value" class="text-indigo-400">2</span>
-                            </label>
-                            <input type="number" id="k" min="1" max="10" value="2"
-                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200" oninput="updateParameter('k')">
+                            <label for="k">Clusters: <span id="k-value">2</span></label>
+                            <input type="number" id="k" min="1" max="10" value="2" oninput="updateParameter('k')">
                         </div>
                         <div id="depth-params" class="hidden">
-                            <label for="depth" class="block text-sm font-medium text-gray-300 mb-2">
-                                Max Depth: <span id="depth-value" class="text-indigo-400">3</span>
-                            </label>
-                            <input type="number" id="depth" min="1" max="5" value="3"
-                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200" oninput="updateParameter('depth')">
+                            <label for="depth">Max Depth: <span id="depth-value">3</span></label>
+                            <input type="number" id="depth" min="1" max="5" value="3" oninput="updateParameter('depth')">
                         </div>
                         <div id="eps-params" class="hidden">
-                            <label for="eps" class="block text-sm font-medium text-gray-300 mb-2">
-                                Epsilon: <span id="eps-value" class="text-indigo-400">0.5</span>
-                            </label>
-                            <input type="number" id="eps" min="0.1" max="2" step="0.1" value="0.5"
-                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200" oninput="updateParameter('eps')">
+                            <label for="eps">Epsilon: <span id="eps-value">0.5</span></label>
+                            <input type="number" id="eps" min="0.1" max="2" step="0.1" value="0.5" oninput="updateParameter('eps')">
                         </div>
                         <div id="min-samples-params" class="hidden">
-                            <label for="min-samples" class="block text-sm font-medium text-gray-300 mb-2">
-                                Min Samples: <span id="min-samples-value" class="text-indigo-400">5</span>
-                            </label>
-                            <input type="number" id="min-samples" min="2" max="20" value="5"
-                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200" oninput="updateParameter('min-samples')">
+                            <label for="min-samples">Min Samples: <span id="min-samples-value">5</span></label>
+                            <input type="number" id="min-samples" min="2" max="20" value="5" oninput="updateParameter('min-samples')">
                         </div>
                         <div id="n-components-params" class="hidden">
-                            <label for="n-components" class="block text-sm font-medium text-gray-300 mb-2">
-                                Components: <span id="n-components-value" class="text-indigo-400">2</span>
-                            </label>
-                            <input type="number" id="n-components" min="1" max="5" value="2"
-                                class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-200" oninput="updateParameter('n-components')">
+                            <label for="n-components">Components: <span id="n-components-value">2</span></label>
+                            <input type="number" id="n-components" min="1" max="5" value="2" oninput="updateParameter('n-components')">
                         </div>
                         <div id="classification-params" class="hidden">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="is_classification"
-                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded" onchange="fitModel()">
-                                <label for="is_classification" class="ml-2 block text-sm text-gray-300">
-                                    Classification Mode
-                                </label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="is_classification" onchange="fitModel()">
+                                <label for="is_classification">Classification Mode</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                        <i class="fas fa-chart-line mr-2"></i>Performance Metrics
-                    </h3>
-                    <div id="metrics" class="text-sm text-gray-300"></div>
+                <div class="metrics-panel">
+                    <h3><i class="fas fa-chart-line"></i> Performance Metrics</h3>
+                    <div id="metrics"></div>
                 </div>
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6 mt-6">
-            <div class="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                    <i class="fas fa-book-open mr-2"></i>Explanation
-                </h3>
-                <div id="explanation" class="text-sm text-gray-300"></div>
+        <div class="info-grid">
+            <div class="explanation-panel">
+                <h3><i class="fas fa-book-open"></i> Explanation</h3>
+                <div id="explanation"></div>
             </div>
 
-            <div class="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                    <i class="fas fa-code mr-2"></i>Code Snippet
-                </h3>
-                <pre id="code" class="text-xs text-gray-200 bg-gray-900 p-4 rounded-md overflow-x-auto"></pre>
+            <div class="code-panel">
+                <h3><i class="fas fa-code"></i> Code Snippet</h3>
+                <pre id="code"><code class="language-python"></code></pre>
             </div>
         </div>
 
-        <div class="bg-gray-800 shadow-xl rounded-xl p-6 mt-6 border border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                <i class="fas fa-table mr-2"></i>Data Preview & Edit
-            </h3>
-            <div id="data-preview" class="text-sm text-gray-300 overflow-x-auto"></div>
+        <div class="data-panel">
+            <h3><i class="fas fa-table"></i> Data Preview & Edit</h3>
+            <div id="data-preview">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature 1</th>
+                            <th>Feature 2</th>
+                            <th>Label</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5.1</td>
+                            <td>3.5</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>4.9</td>
+                            <td>3.0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>7.0</td>
+                            <td>3.2</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="bg-gray-800 shadow-xl rounded-xl p-6 mt-6 border border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-200 mb-4">
-                <i class="fas fa-question-circle mr-2"></i>Help Center
-            </h3>
-            <div class="text-sm text-gray-300">
-                <p class="mb-2"><strong>How to Use:</strong> Upload a CSV, select inputs and label, choose an algorithm, tweak parameters, and run. Use cross-validation, grid search, or edit data points.</p>
-                <p class="mb-2"><strong>Supervised Algorithms:</strong></p>
-                <ul class="list-disc pl-5">
+        <div class="help-panel">
+            <h3><i class="fas fa-question-circle"></i> Help Center</h3>
+            <div>
+                <p><strong>How to Use:</strong> Upload a CSV, select inputs and label, choose an algorithm, tweak parameters, and run. Use cross-validation, grid search, or edit data points.</p>
+                <p><strong>Supervised Algorithms:</strong></p>
+                <ul>
                     <li><strong>Linear Regression:</strong> Predicts continuous values with a line.</li>
                     <li><strong>Logistic Regression:</strong> Classifies binary outcomes.</li>
                     <li><strong>Decision Tree:</strong> Splits data for prediction.</li>
                     <li><strong>Random Forest:</strong> Ensemble of trees.</li>
                     <li><strong>SVM:</strong> Separates data with a hyperplane.</li>
                 </ul>
-                <p class="mb-2 mt-2"><strong>Unsupervised Algorithms:</strong></p>
-                <ul class="list-disc pl-5">
+                <p><strong>Unsupervised Algorithms:</strong></p>
+                <ul>
                     <li><strong>K-Means:</strong> Groups data into k clusters.</li>
                     <li><strong>DBSCAN:</strong> Density-based clustering.</li>
                     <li><strong>PCA:</strong> Reduces dimensions.</li>
@@ -255,5 +221,6 @@
     </div>
 
     <script src="/static/script.js"></script>
+    <script src="/static/scripts.js"></script>
 </body>
 </html>
