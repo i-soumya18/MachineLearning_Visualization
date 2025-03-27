@@ -4,6 +4,8 @@ const algoSelect = document.getElementById('algo');
 const runBtn = document.querySelector('button[onclick="fitModel()"]');
 const compareBtn = document.querySelector('button[onclick="compareAlgorithms()"]');
 const resetBtn = document.querySelector('button[onclick="reset()"]');
+const header = document.querySelector('header');
+const panels = document.querySelectorAll('.control-panel, .visualization-panel, .params-panel, .metrics-panel, .explanation-panel, .code-panel, .data-panel, .help-panel');
 
 // Theme variables
 const themes = {
@@ -47,6 +49,7 @@ function createThemeToggle() {
     themeToggle.id = 'theme-toggle';
     themeToggle.innerHTML = '<i class="fas fa-moon"></i> Theme';
     themeToggle.classList.add('theme-toggle');
+    themeToggle.setAttribute('aria-label', 'Toggle theme');
     document.querySelector('header').appendChild(themeToggle);
 
     themeToggle.addEventListener('click', toggleTheme);
@@ -58,9 +61,10 @@ function toggleTheme() {
     applyTheme(currentTheme);
     localStorage.setItem('theme', currentTheme);
 
-    // Update icon
+    // Update icon and accessibility
     const icon = themeToggle.querySelector('i');
     icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    themeToggle.setAttribute('aria-label', currentTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
 }
 
 // Apply the selected theme
@@ -72,7 +76,6 @@ function applyTheme(theme) {
         root.style.setProperty(key, themeColors[key]);
     });
 
-    // Additional theme-specific adjustments
     if (theme === 'dark') {
         document.body.classList.add('dark-theme');
     } else {
@@ -80,19 +83,44 @@ function applyTheme(theme) {
     }
 }
 
+// Add collapsible functionality to panels
+function makePanelsCollapsible() {
+    panels.forEach(panel => {
+        const header = panel.querySelector('h2, h3');
+        if (!header) return;
+
+        // Add collapse toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        toggleBtn.classList.add('collapse-toggle');
+        toggleBtn.setAttribute('aria-label', `Toggle ${header.textContent} panel`);
+        header.appendChild(toggleBtn);
+
+        toggleBtn.addEventListener('click', () => {
+            const content = panel.querySelector('div');
+            const isCollapsed = content.classList.toggle('collapsed');
+            toggleBtn.querySelector('i').className = isCollapsed ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
+            panel.setAttribute('aria-expanded', !isCollapsed);
+        });
+
+        // Set initial ARIA attribute
+        panel.setAttribute('aria-expanded', 'true');
+    });
+}
+
 // Initialize UI enhancements
 function initUI() {
     createThemeToggle();
+    makePanelsCollapsible();
 
     // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         currentTheme = savedTheme;
         applyTheme(currentTheme);
-
-        // Update icon based on saved theme
         const icon = themeToggle.querySelector('i');
         icon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', currentTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
     }
 
     // Add ripple effect to buttons
@@ -116,7 +144,7 @@ function initUI() {
     });
 
     // Add hover effects to panels
-    document.querySelectorAll('.params-panel, .metrics-panel, .explanation-panel, .code-panel, .data-panel, .help-panel').forEach(panel => {
+    panels.forEach(panel => {
         panel.addEventListener('mouseenter', () => {
             panel.style.transform = 'translateY(-5px)';
             panel.style.boxShadow = '0 10px 15px rgba(0, 0, 0, 0.1)';
@@ -128,6 +156,12 @@ function initUI() {
         });
     });
 
+    // Make header sticky
+    header.classList.add('sticky-header');
+
+    // Enable smooth scrolling
+    document.documentElement.style.scrollBehavior = 'smooth';
+
     // Initialize algorithm parameters visibility
     updateAlgorithmParams();
 }
@@ -136,12 +170,10 @@ function initUI() {
 function updateAlgorithmParams() {
     const algo = algoSelect.value;
 
-    // Hide all parameter sections first
     document.querySelectorAll('#lr-params, #k-params, #depth-params, #eps-params, #min-samples-params, #n-components-params, #classification-params').forEach(el => {
         el.classList.add('hidden');
     });
 
-    // Show relevant parameters
     switch(algo) {
         case 'linear':
         case 'logistic':
@@ -181,7 +213,6 @@ function updateParameter(param) {
 // Event Listeners
 algoSelect.addEventListener('change', updateAlgorithmParams);
 
-// Set up parameter event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initUI();
 
@@ -191,9 +222,19 @@ document.addEventListener('DOMContentLoaded', () => {
             updateParameter(param);
         });
     });
+
+    // Keyboard navigation for buttons
+    document.querySelectorAll('button, label[for="upload"]').forEach(button => {
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                button.click();
+            }
+        });
+    });
 });
 
-// Add CSS for ripple effect and theme toggle
+// Add CSS for enhancements
 const style = document.createElement('style');
 style.textContent = `
     .ripple {
@@ -228,6 +269,28 @@ style.textContent = `
     
     .theme-toggle:hover {
         background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .collapse-toggle {
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        margin-left: 0.5rem;
+        padding: 0.2rem;
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .collapsed {
+        display: none;
     }
     
     .dark-theme .visualization-panel,
