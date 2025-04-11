@@ -7,4 +7,3 @@ matplotlib
 uuid
 pillow
 datetime
-shutil
