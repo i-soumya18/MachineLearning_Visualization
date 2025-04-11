@@ -1,4 +1,11 @@
-numpy
+matplotlib
+nvidia-ml-py
+pynvml
+seaborn
+tensorflow
+
+streamlit
 pandas
-Flask
+joblib
 scikit-learn
+numpy

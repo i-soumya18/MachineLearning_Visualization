@@ -1329,3 +1329,33 @@
 2025-04-11 12:14:35,807 - INFO - Linear Regression: {'mse': 2.5559416007680715, 'r2': 0.00908895809527388, 'cv_mse': 2.5561408470585136, 'cv_r2': 0.009007836747814468}
 2025-04-11 12:14:35,807 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:35] "POST /fit HTTP/1.1" 200 -
 2025-04-11 12:14:36,344 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:36] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:35:33,988 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:33] "GET / HTTP/1.1" 200 -
+2025-04-11 12:35:34,040 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:34] "GET /static/script.js HTTP/1.1" 200 -
+2025-04-11 12:35:34,041 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:34] "GET /static/saas-features.js HTTP/1.1" 200 -
+2025-04-11 12:35:34,042 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:34] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-04-11 12:35:34,042 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:34] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 12:35:34,708 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:34] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-11 12:35:35,030 - INFO - 127.0.0.1 - - [11/Apr/2025 12:35:35] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:38:39,733 - ERROR - Fit endpoint error: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-04-11 12:38:39,734 - INFO - 127.0.0.1 - - [11/Apr/2025 12:38:39] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-04-11 12:38:40,749 - INFO - 127.0.0.1 - - [11/Apr/2025 12:38:40] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:39:02,005 - INFO - Linear Regression: {'mse': 36676355.79457731, 'r2': 0.7497225098709179}
+2025-04-11 12:39:02,005 - INFO - 127.0.0.1 - - [11/Apr/2025 12:39:02] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:39:03,002 - INFO - 127.0.0.1 - - [11/Apr/2025 12:39:03] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:49:53,812 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/app.py', reloading
+2025-04-11 12:49:53,816 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/app.py', reloading
+2025-04-11 12:49:54,358 - INFO -  * Restarting with watchdog (inotify)
+2025-04-11 14:44:39,711 - ERROR - Algorithm error: could not convert string to float: 'YBK Jaiswal'
+2025-04-11 14:45:11,863 - ERROR - Algorithm error: could not convert string to float: 'YBK Jaiswal'
+2025-04-11 14:45:19,368 - ERROR - Algorithm error: could not convert string to float: 'Mohammed Shami'
+2025-04-11 14:45:23,888 - ERROR - Algorithm error: could not convert string to float: 'JC Buttler'
+2025-04-11 14:45:29,821 - ERROR - Algorithm error: could not convert string to float: 'legbyes'
+2025-04-11 14:48:35,225 - ERROR - Algorithm error: could not convert string to float: 'Iris-setosa'
+2025-04-11 14:48:40,898 - INFO - Linear Regression: {'mse': 4.144806672848733e-31, 'r2': 1.0}
+2025-04-11 14:50:51,714 - INFO - Linear Regression: {'mse': 1.1166141693703182, 'r2': 0.7465141424532272}
+2025-04-11 14:51:19,765 - ERROR - Prediction error: X has 10 features, but StandardScaler is expecting 9 features as input.
+2025-04-11 14:51:26,364 - INFO - K-Means: Silhouette=0.43432297324827784
+2025-04-11 14:51:31,710 - INFO - K-Means: Silhouette=0.3215656185096536
+2025-04-11 14:51:38,412 - INFO - DBSCAN: Silhouette=-0.18426686317945778
+2025-04-11 14:51:52,994 - INFO - DBSCAN: Silhouette=-0.049330578357929394
+2025-04-11 14:51:58,294 - ERROR - Prediction error: 'DBSCAN' object has no attribute 'predict'
