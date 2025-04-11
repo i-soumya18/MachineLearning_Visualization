@@ -249,6 +249,82 @@ document.getElementById('label-col').addEventListener('change', updateDataFromCo
 document.getElementById('normalize').addEventListener('change', () => updateDataFromColumns() && fitModel());
 document.getElementById('cv').addEventListener('change', fitModel);
 
+async function fitModel() {
+    const algo = document.getElementById('algo').value;
+    document.getElementById('algo-status').textContent = 'Algorithm Status: Running...';
+    document.getElementById('algo-status').classList.add('pulse');
+    
+    // Disable the run button to prevent multiple submissions
+    const runButton = document.querySelector('button[onclick="fitModel()"]');
+    const originalText = runButton.innerHTML;
+    runButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    runButton.disabled = true;
+    
+    const payload = {
+        X: data.map(d => d.X),
+        y: data.map(d => d.label).filter(l => l !== null && !isNaN(+l)).map(l => +l),
+        labels: data.map(d => d.label),
+        algo,
+        normalize: document.getElementById('normalize').checked,
+        cv: document.getElementById('cv').checked,
+        ...(algo === 'linear' || algo === 'logistic' ? { lr: +document.getElementById('lr').value } : {}),
+        ...(algo === 'kmeans' ? { k: +document.getElementById('k').value } : {}),
+        ...(algo === 'dtree' || algo === 'rf' ? { depth: +document.getElementById('depth').value, is_classification: document.getElementById('is_classification').checked } : {}),
+        ...(algo === 'svm' ? { is_classification: document.getElementById('is_classification').checked } : {}),
+        ...(algo === 'dbscan' ? { eps: +document.getElementById('eps').value, min_samples: +document.getElementById('min-samples').value } : {}),
+        ...(algo === 'pca' ? { n_components: +document.getElementById('n-components').value } : {})
+    };
+
+    try {
+        const response = await fetch('/fit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error((await response.json()).error || 'Request failed');
+        const result = await response.json();
+        lastResult = result;
+        history = result.history || result.boundaries || result.transformed || [];
+        stepIndex = 0;
+        document.getElementById('step-btn').disabled = !result.history;
+        if (['dtree', 'rf', 'svm'].includes(algo)) visualizeBoundaries(result.boundaries);
+        else if (algo === 'kmeans') visualizeClusters(result.history, result.clusters);
+        else if (algo === 'dbscan') visualizeClusters([], result.clusters);
+        else if (algo === 'pca') visualizePCA(result.transformed, result.variance);
+        else stepThrough();
+
+        let metricsText = '';
+        if (result.metrics) {
+            if ('mse' in result.metrics) metricsText += `MSE: ${result.metrics.mse.toFixed(4)}, R²: ${result.metrics.r2.toFixed(4)}`;
+            if ('accuracy' in result.metrics) metricsText += `Accuracy: ${(result.metrics.accuracy * 100).toFixed(2)}%`;
+            if ('silhouette' in result.metrics) metricsText += `Silhouette Score: ${result.metrics.silhouette.toFixed(4)}`;
+            if ('cv_mse' in result.metrics) metricsText += `\nCV MSE: ${result.metrics.cv_mse.toFixed(4)}, CV R²: ${result.metrics.cv_r2.toFixed(4)}`;
+            if ('cv_accuracy' in result.metrics) metricsText += `\nCV Accuracy: ${(result.metrics.cv_accuracy * 100).toFixed(2)}%`;
+        } else if (algo === 'pca') {
+            metricsText = `Explained Variance: ${result.variance.map(v => v.toFixed(4)).join(', ')}`;
+        }
+        document.getElementById('metrics').textContent = metricsText;
+        document.getElementById('algo-status').textContent = 'Algorithm Status: Completed';
+        document.getElementById('algo-status').classList.remove('pulse');
+        
+        // Add result to execution history for SaaS features
+        addToHistory(algo, result);
+    } catch (error) {
+        console.error(`Fit model error: ${error}`);
+        document.getElementById('metrics').innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</div>`;
+        document.getElementById('algo-status').textContent = `Algorithm Status: Error - ${error.message}`;
+        document.getElementById('algo-status').classList.remove('pulse');
+        document.getElementById('algo-status').classList.add('error');
+        setTimeout(() => {
+            document.getElementById('algo-status').classList.remove('error');
+        }, 5000);
+    } finally {
+        // Re-enable the run button
+        runButton.innerHTML = originalText;
+        runButton.disabled = false;
+    }
+}
+
 function generateRandomData() {
     try {
         const numInputs = parseInt(document.getElementById('num-inputs').value);
@@ -297,61 +373,6 @@ function updateParameter(id) {
     const element = document.getElementById(id);
     if (element) element.addEventListener('input', () => updateParameter(id));
 });
-
-async function fitModel() {
-    const algo = document.getElementById('algo').value;
-    document.getElementById('algo-status').textContent = 'Algorithm Status: Running...';
-    const payload = {
-        X: data.map(d => d.X),
-        y: data.map(d => d.label).filter(l => l !== null && !isNaN(+l)).map(l => +l),
-        labels: data.map(d => d.label),
-        algo,
-        normalize: document.getElementById('normalize').checked,
-        cv: document.getElementById('cv').checked,
-        ...(algo === 'linear' || algo === 'logistic' ? { lr: +document.getElementById('lr').value } : {}),
-        ...(algo === 'kmeans' ? { k: +document.getElementById('k').value } : {}),
-        ...(algo === 'dtree' || algo === 'rf' ? { depth: +document.getElementById('depth').value, is_classification: document.getElementById('is_classification').checked } : {}),
-        ...(algo === 'svm' ? { is_classification: document.getElementById('is_classification').checked } : {}),
-        ...(algo === 'dbscan' ? { eps: +document.getElementById('eps').value, min_samples: +document.getElementById('min-samples').value } : {}),
-        ...(algo === 'pca' ? { n_components: +document.getElementById('n-components').value } : {})
-    };
-
-    try {
-        const response = await fetch('/fit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (!response.ok) throw new Error((await response.json()).error || 'Request failed');
-        const result = await response.json();
-        lastResult = result;
-        history = result.history || result.boundaries || result.transformed || [];
-        stepIndex = 0;
-        document.getElementById('step-btn').disabled = !result.history;
-        if (['dtree', 'rf', 'svm'].includes(algo)) visualizeBoundaries(result.boundaries);
-        else if (algo === 'kmeans') visualizeClusters(result.history, result.clusters);
-        else if (algo === 'dbscan') visualizeClusters([], result.clusters);
-        else if (algo === 'pca') visualizePCA(result.transformed, result.variance);
-        else stepThrough();
-
-        let metricsText = '';
-        if (result.metrics) {
-            if ('mse' in result.metrics) metricsText += `MSE: ${result.metrics.mse.toFixed(4)}, R²: ${result.metrics.r2.toFixed(4)}`;
-            if ('accuracy' in result.metrics) metricsText += `Accuracy: ${(result.metrics.accuracy * 100).toFixed(2)}%`;
-            if ('silhouette' in result.metrics) metricsText += `Silhouette Score: ${result.metrics.silhouette.toFixed(4)}`;
-            if ('cv_mse' in result.metrics) metricsText += `\nCV MSE: ${result.metrics.cv_mse.toFixed(4)}, CV R²: ${result.metrics.cv_r2.toFixed(4)}`;
-            if ('cv_accuracy' in result.metrics) metricsText += `\nCV Accuracy: ${(result.metrics.cv_accuracy * 100).toFixed(2)}%`;
-        } else if (algo === 'pca') {
-            metricsText = `Explained Variance: ${result.variance.map(v => v.toFixed(4)).join(', ')}`;
-        }
-        document.getElementById('metrics').textContent = metricsText;
-        document.getElementById('algo-status').textContent = 'Algorithm Status: Completed';
-    } catch (error) {
-        console.error(`Fit model error: ${error}`);
-        alert(`Error running algorithm: ${error.message}`);
-        document.getElementById('algo-status').textContent = `Algorithm Status: Error - ${error.message}`;
-    }
-}
 
 function stepThrough() {
     if (stepIndex >= history.length) {

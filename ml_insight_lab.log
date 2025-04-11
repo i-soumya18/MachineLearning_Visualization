@@ -1265,3 +1265,67 @@
 2025-04-11 11:22:45,695 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
 2025-04-11 11:22:45,704 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
 2025-04-11 11:22:46,383 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:46] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 11:35:36,899 - INFO - 127.0.0.1 - - [11/Apr/2025 11:35:36] "GET / HTTP/1.1" 200 -
+2025-04-11 11:35:36,918 - INFO - 127.0.0.1 - - [11/Apr/2025 11:35:36] "GET /static/script.js HTTP/1.1" 200 -
+2025-04-11 11:35:36,919 - INFO - 127.0.0.1 - - [11/Apr/2025 11:35:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:35:36,920 - INFO - 127.0.0.1 - - [11/Apr/2025 11:35:36] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-04-11 11:35:37,937 - INFO - 127.0.0.1 - - [11/Apr/2025 11:35:37] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 11:36:51,883 - INFO - 127.0.0.1 - - [11/Apr/2025 11:36:51] "POST /grid_search HTTP/1.1" 200 -
+2025-04-11 11:36:52,606 - INFO - 127.0.0.1 - - [11/Apr/2025 11:36:52] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 11:36:56,480 - INFO - Linear Regression: {'mse': 2.528301177907194, 'r2': 0.019804852467636858}
+2025-04-11 11:36:56,480 - INFO - 127.0.0.1 - - [11/Apr/2025 11:36:56] "POST /fit HTTP/1.1" 200 -
+2025-04-11 11:36:57,299 - INFO - 127.0.0.1 - - [11/Apr/2025 11:36:57] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 11:39:26,519 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:39:26,519 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:39:26,920 - INFO -  * Restarting with watchdog (inotify)
+2025-04-11 11:39:27,515 - INFO - Starting ML Insight Lab application
+2025-04-11 11:39:27,521 - WARNING -  * Debugger is active!
+2025-04-11 11:39:27,521 - INFO -  * Debugger PIN: 122-140-748
+2025-04-11 11:39:51,487 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:39:51,489 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:39:51,489 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:39:52,109 - INFO -  * Restarting with watchdog (inotify)
+2025-04-11 11:39:52,682 - INFO - Starting ML Insight Lab application
+2025-04-11 11:39:52,686 - WARNING -  * Debugger is active!
+2025-04-11 11:39:52,686 - INFO -  * Debugger PIN: 122-140-748
+2025-04-11 11:41:15,534 - INFO -  * Detected change in '/home/soumya/PycharmProjects/NW_ML_Visualiser/train_model.py', reloading
+2025-04-11 11:41:16,286 - INFO -  * Restarting with watchdog (inotify)
+2025-04-11 11:41:17,385 - INFO - Starting ML Insight Lab application
+2025-04-11 11:41:17,389 - WARNING -  * Debugger is active!
+2025-04-11 11:41:17,389 - INFO -  * Debugger PIN: 122-140-748
+2025-04-11 12:10:55,670 - INFO - 127.0.0.1 - - [11/Apr/2025 12:10:55] "POST /grid_search HTTP/1.1" 200 -
+2025-04-11 12:10:56,502 - INFO - 127.0.0.1 - - [11/Apr/2025 12:10:56] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:11:07,561 - INFO - Linear Regression: {'mse': 2.5578404648456896, 'r2': 0.008352788935140243}
+2025-04-11 12:11:07,561 - INFO - 127.0.0.1 - - [11/Apr/2025 12:11:07] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:11:08,349 - INFO - 127.0.0.1 - - [11/Apr/2025 12:11:08] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:12:37,903 - INFO - Encoded categorical labels for logistic
+2025-04-11 12:12:38,574 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:38] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:12:39,972 - INFO - Encoded categorical labels for logistic
+2025-04-11 12:12:40,605 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:40] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:12:41,837 - INFO - Logistic Regression: {'accuracy': 0.4153987094718394}
+2025-04-11 12:12:41,838 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:41] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:12:43,563 - INFO - Logistic Regression: {'accuracy': 0.4153987094718394}
+2025-04-11 12:12:43,563 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:43] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:12:51,927 - INFO - PCA: Variance=[0.9999997202508731, 1.1391485031266735e-07]
+2025-04-11 12:12:52,537 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:52] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:12:52,692 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:52] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:12:53,176 - INFO - PCA: Variance=[0.9999997202508731, 1.1391485031266735e-07]
+2025-04-11 12:12:53,899 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:53] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:12:53,900 - INFO - 127.0.0.1 - - [11/Apr/2025 12:12:53] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:13:46,585 - INFO - Encoded categorical labels for dtree
+2025-04-11 12:13:46,901 - INFO - Decision Tree: {'r2': 0.011721161986845474}
+2025-04-11 12:13:46,907 - INFO - 127.0.0.1 - - [11/Apr/2025 12:13:46] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:13:47,312 - INFO - 127.0.0.1 - - [11/Apr/2025 12:13:47] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:13:48,795 - INFO - Encoded categorical labels for dtree
+2025-04-11 12:13:49,114 - INFO - Decision Tree: {'r2': 0.011721161986845474}
+2025-04-11 12:13:49,120 - INFO - 127.0.0.1 - - [11/Apr/2025 12:13:49] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:13:49,507 - INFO - 127.0.0.1 - - [11/Apr/2025 12:13:49] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:14:04,142 - INFO - Linear Regression: {'mse': 2.5559416007680715, 'r2': 0.00908895809527388}
+2025-04-11 12:14:04,143 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:04] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:14:04,799 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:04] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:14:14,994 - INFO - Linear Regression: {'mse': 2.5559416007680715, 'r2': 0.00908895809527388, 'cv_mse': 2.5561408470585136, 'cv_r2': 0.009007836747814468}
+2025-04-11 12:14:14,994 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:14] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:14:15,610 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:15] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 12:14:35,807 - INFO - Linear Regression: {'mse': 2.5559416007680715, 'r2': 0.00908895809527388, 'cv_mse': 2.5561408470585136, 'cv_r2': 0.009007836747814468}
+2025-04-11 12:14:35,807 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:35] "POST /fit HTTP/1.1" 200 -
+2025-04-11 12:14:36,344 - INFO - 127.0.0.1 - - [11/Apr/2025 12:14:36] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -

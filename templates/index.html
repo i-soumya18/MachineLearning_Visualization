@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Insight Lab</title>
+    <title>ML Insight Lab - SaaS</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -13,214 +13,573 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Toast Container for Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Main Container -->
     <div class="container">
         <header>
+            <div class="user-profile" style="position: absolute; right: 20px; top: 20px;">
+                <button onclick="toggleProfileDropdown()" class="profile-button">
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" alt="User Avatar">
+                    <span>My Account</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <ul>
+                        <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="#" onclick="showModal('settings-modal')"><i class="fas fa-cog"></i> Settings</a></li>
+                        <li><a href="#" onclick="showModal('subscription-modal')"><i class="fas fa-crown"></i> Subscription</a></li>
+                        <li><hr></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
             <h1>ML Insight Lab</h1>
-            <p>Advanced Machine Learning Exploration</p>
+            <p>Advanced Machine Learning Exploration & Visualization</p>
         </header>
 
-        <div class="control-panel">
-            <div class="control-grid">
-                <div>
-                    <label for="algo"><i class="fas fa-project-diagram"></i> Algorithm</label>
-                    <select id="algo">
-                        <optgroup label="Supervised">
-                            <option value="linear">Linear Regression</option>
-                            <option value="logistic">Logistic Regression</option>
-                            <option value="dtree">Decision Tree</option>
-                            <option value="rf">Random Forest</option>
-                            <option value="svm">SVM</option>
-                        </optgroup>
-                        <optgroup label="Unsupervised">
-                            <option value="kmeans">K-Means</option>
-                            <option value="dbscan">DBSCAN</option>
-                            <option value="pca">PCA</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div class="button-group">
-                    <input type="file" id="upload" accept=".csv" class="hidden" />
-                    <label for="upload"><i class="fas fa-upload"></i> Upload CSV</label>
-                    <button onclick="generateRandomData()"><i class="fas fa-random"></i> Random Data</button>
-                    <button onclick="loadScenario()"><i class="fas fa-leaf"></i> Iris Scenario</button>
-                </div>
-
-                <div class="button-group right">
-                    <button onclick="fitModel()"><i class="fas fa-play-circle"></i> Run Algorithm</button>
-                    <button onclick="compareAlgorithms()"><i class="fas fa-balance-scale"></i> Compare</button>
-                    <button onclick="reset()"><i class="fas fa-undo"></i> Reset</button>
-                </div>
+        <!-- Dashboard/Main Navigation -->
+        <div class="dashboard-grid">
+            <div class="sidebar-nav">
+                <h3>Dashboard</h3>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> ML Laboratory</a></li>
+                    <li><a href="#" onclick="showModal('history-modal')"><i class="fas fa-history"></i> History</a></li>
+                    <li><a href="#" onclick="showModal('team-modal')"><i class="fas fa-users"></i> Team Collaboration</a></li>
+                    <li><a href="#" onclick="showModal('export-modal')"><i class="fas fa-file-export"></i> Export & Share</a></li>
+                    <li><a href="#" onclick="showModal('insights-modal')"><i class="fas fa-lightbulb"></i> Data Insights</a></li>
+                </ul>
             </div>
 
-            <div id="input-config">
-                <div>
-                    <label for="num-inputs">Number of Inputs:</label>
-                    <input type="number" id="num-inputs" min="1" max="10" value="2">
-                </div>
-                <div>
-                    <label for="label-col">Label Column:</label>
-                    <select id="label-col">
-                        <option value="">None</option>
-                    </select>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="normalize">
-                    <label for="normalize">Normalize Data</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="cv">
-                    <label for="cv">Cross-Validation</label>
-                </div>
-            </div>
-            <div id="input-selectors"></div>
+            <div class="app-content">
+                <div class="control-panel">
+                    <div class="control-grid">
+                        <div>
+                            <label for="algo"><i class="fas fa-project-diagram"></i> Algorithm</label>
+                            <select id="algo">
+                                <optgroup label="Supervised">
+                                    <option value="linear">Linear Regression</option>
+                                    <option value="logistic">Logistic Regression</option>
+                                    <option value="dtree">Decision Tree</option>
+                                    <option value="rf">Random Forest</option>
+                                    <option value="svm">SVM</option>
+                                </optgroup>
+                                <optgroup label="Unsupervised">
+                                    <option value="kmeans">K-Means</option>
+                                    <option value="dbscan">DBSCAN</option>
+                                    <option value="pca">PCA</option>
+                                </optgroup>
+                            </select>
+                        </div>
 
-            <div class="viz-config">
-                <div>
-                    <label for="viz-type"><i class="fas fa-chart-line"></i> Visualization Type</label>
-                    <select id="viz-type">
-                        <option value="scatter">2D Scatter</option>
-                        <option value="line">Line</option>
-                        <option value="bar">Bar</option>
-                        <option value="scatter3d">3D Scatter</option>
-                    </select>
-                </div>
-                <div class="status">
-                    <p id="data-status">Data Status: No data loaded</p>
-                    <p id="algo-status">Algorithm Status: Not running</p>
-                </div>
-            </div>
+                        <div class="button-group">
+                            <input type="file" id="upload" accept=".csv" class="hidden" />
+                            <label for="upload"><i class="fas fa-upload"></i> Upload CSV</label>
+                            <button onclick="generateRandomData()"><i class="fas fa-random"></i> Random Data</button>
+                            <button onclick="loadScenario()"><i class="fas fa-leaf"></i> Iris Scenario</button>
+                        </div>
 
-            <div>
-                <button onclick="runGridSearch()"><i class="fas fa-search"></i> Run Grid Search</button>
-            </div>
-        </div>
+                        <div class="button-group right">
+                            <button onclick="fitModel()"><i class="fas fa-play-circle"></i> Run Algorithm</button>
+                            <button onclick="compareAlgorithms()"><i class="fas fa-balance-scale"></i> Compare</button>
+                            <button onclick="reset()"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </div>
 
-        <div class="main-grid">
-            <div class="visualization-panel">
-                <div class="panel-header">
-                    <h2>Visualization</h2>
-                    <div class="button-group">
-                        <button onclick="stepThrough()" id="step-btn" disabled><i class="fas fa-step-forward"></i> Next Step</button>
-                        <button onclick="downloadViz()"><i class="fas fa-download"></i> Download SVG</button>
-                        <button onclick="exportResults()"><i class="fas fa-file-export"></i> Export Results</button>
+                    <div id="input-config">
+                        <div>
+                            <label for="num-inputs">Number of Inputs:</label>
+                            <input type="number" id="num-inputs" min="1" max="10" value="2">
+                        </div>
+                        <div>
+                            <label for="label-col">Label Column:</label>
+                            <select id="label-col">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="normalize">
+                            <label for="normalize">Normalize Data</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="cv">
+                            <label for="cv">Cross-Validation</label>
+                        </div>
+                    </div>
+                    <div id="input-selectors"></div>
+
+                    <div class="viz-config">
+                        <div>
+                            <label for="viz-type"><i class="fas fa-chart-line"></i> Visualization Type</label>
+                            <select id="viz-type">
+                                <option value="scatter">2D Scatter</option>
+                                <option value="line">Line</option>
+                                <option value="bar">Bar</option>
+                                <option value="scatter3d">3D Scatter</option>
+                            </select>
+                        </div>
+                        <div class="status">
+                            <p id="data-status">Data Status: No data loaded</p>
+                            <p id="algo-status">Algorithm Status: Not running</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button onclick="runGridSearch()"><i class="fas fa-search"></i> Run Grid Search</button>
                     </div>
                 </div>
-                <svg id="visualization" viewBox="0 0 600 400" class="hidden"></svg>
-                <div id="plotly-viz" class="hidden"></div>
-            </div>
 
-            <div class="side-panels">
-                <div class="params-panel">
-                    <h3><i class="fas fa-sliders-h"></i> Algorithm Parameters</h3>
-                    <div>
-                        <div id="lr-params">
-                            <label for="lr">Learning Rate: <span id="lr-value">0.01</span></label>
-                            <input type="range" id="lr" min="0.001" max="0.1" step="0.001" value="0.01" oninput="updateParameter('lr')">
-                        </div>
-                        <div id="k-params" class="hidden">
-                            <label for="k">Clusters: <span id="k-value">2</span></label>
-                            <input type="number" id="k" min="1" max="10" value="2" oninput="updateParameter('k')">
-                        </div>
-                        <div id="depth-params" class="hidden">
-                            <label for="depth">Max Depth: <span id="depth-value">3</span></label>
-                            <input type="number" id="depth" min="1" max="5" value="3" oninput="updateParameter('depth')">
-                        </div>
-                        <div id="eps-params" class="hidden">
-                            <label for="eps">Epsilon: <span id="eps-value">0.5</span></label>
-                            <input type="number" id="eps" min="0.1" max="2" step="0.1" value="0.5" oninput="updateParameter('eps')">
-                        </div>
-                        <div id="min-samples-params" class="hidden">
-                            <label for="min-samples">Min Samples: <span id="min-samples-value">5</span></label>
-                            <input type="number" id="min-samples" min="2" max="20" value="5" oninput="updateParameter('min-samples')">
-                        </div>
-                        <div id="n-components-params" class="hidden">
-                            <label for="n-components">Components: <span id="n-components-value">2</span></label>
-                            <input type="number" id="n-components" min="1" max="5" value="2" oninput="updateParameter('n-components')">
-                        </div>
-                        <div id="classification-params" class="hidden">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="is_classification" onchange="fitModel()">
-                                <label for="is_classification">Classification Mode</label>
+                <div class="main-grid">
+                    <div class="visualization-panel">
+                        <div class="panel-header">
+                            <h2>Visualization</h2>
+                            <div class="button-group">
+                                <button onclick="stepThrough()" id="step-btn" disabled><i class="fas fa-step-forward"></i> Next Step</button>
+                                <button onclick="downloadViz()"><i class="fas fa-download"></i> Download</button>
+                                <button onclick="exportModel()"><i class="fas fa-file-export"></i> Export Model</button>
                             </div>
                         </div>
+                        <svg id="visualization" viewBox="0 0 600 400" class="hidden"></svg>
+                        <div id="plotly-viz" class="hidden"></div>
+                    </div>
+
+                    <div class="side-panels">
+                        <div class="params-panel">
+                            <h3><i class="fas fa-sliders-h"></i> Algorithm Parameters</h3>
+                            <div>
+                                <div id="lr-params">
+                                    <label for="lr">Learning Rate: <span id="lr-value">0.01</span></label>
+                                    <input type="range" id="lr" min="0.001" max="0.1" step="0.001" value="0.01" oninput="updateParameter('lr')">
+                                </div>
+                                <div id="k-params" class="hidden">
+                                    <label for="k">Clusters: <span id="k-value">2</span></label>
+                                    <input type="number" id="k" min="1" max="10" value="2" oninput="updateParameter('k')">
+                                </div>
+                                <div id="depth-params" class="hidden">
+                                    <label for="depth">Max Depth: <span id="depth-value">3</span></label>
+                                    <input type="number" id="depth" min="1" max="5" value="3" oninput="updateParameter('depth')">
+                                </div>
+                                <div id="eps-params" class="hidden">
+                                    <label for="eps">Epsilon: <span id="eps-value">0.5</span></label>
+                                    <input type="number" id="eps" min="0.1" max="2" step="0.1" value="0.5" oninput="updateParameter('eps')">
+                                </div>
+                                <div id="min-samples-params" class="hidden">
+                                    <label for="min-samples">Min Samples: <span id="min-samples-value">5</span></label>
+                                    <input type="number" id="min-samples" min="2" max="20" value="5" oninput="updateParameter('min-samples')">
+                                </div>
+                                <div id="n-components-params" class="hidden">
+                                    <label for="n-components">Components: <span id="n-components-value">2</span></label>
+                                    <input type="number" id="n-components" min="1" max="5" value="2" oninput="updateParameter('n-components')">
+                                </div>
+                                <div id="classification-params" class="hidden">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="is_classification" onchange="fitModel()">
+                                        <label for="is_classification">Classification Mode</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metrics-panel">
+                            <h3><i class="fas fa-chart-line"></i> Performance Metrics</h3>
+                            <div id="metrics"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="metrics-panel">
-                    <h3><i class="fas fa-chart-line"></i> Performance Metrics</h3>
-                    <div id="metrics"></div>
+                <div class="info-grid">
+                    <div class="explanation-panel">
+                        <h3><i class="fas fa-book-open"></i> Explanation</h3>
+                        <div id="explanation"></div>
+                    </div>
+
+                    <div class="code-panel">
+                        <h3><i class="fas fa-code"></i> Code Snippet</h3>
+                        <pre id="code"><code class="language-python"></code></pre>
+                    </div>
+                </div>
+
+                <div class="data-panel">
+                    <h3><i class="fas fa-table"></i> Data Preview & Edit</h3>
+                    <div id="data-preview">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Feature 1</th>
+                                    <th>Feature 2</th>
+                                    <th>Label</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>5.1</td>
+                                    <td>3.5</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>4.9</td>
+                                    <td>3.0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>7.0</td>
+                                    <td>3.2</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="help-panel">
+                    <h3><i class="fas fa-question-circle"></i> Help Center</h3>
+                    <div>
+                        <p><strong>How to Use:</strong> Upload a CSV, select inputs and label, choose an algorithm, tweak parameters, and run. Use cross-validation, grid search, or edit data points.</p>
+                        <p><strong>Supervised Algorithms:</strong></p>
+                        <ul>
+                            <li><strong>Linear Regression:</strong> Predicts continuous values with a line.</li>
+                            <li><strong>Logistic Regression:</strong> Classifies binary outcomes.</li>
+                            <li><strong>Decision Tree:</strong> Splits data for prediction.</li>
+                            <li><strong>Random Forest:</strong> Ensemble of trees.</li>
+                            <li><strong>SVM:</strong> Separates data with a hyperplane.</li>
+                        </ul>
+                        <p><strong>Unsupervised Algorithms:</strong></p>
+                        <ul>
+                            <li><strong>K-Means:</strong> Groups data into k clusters.</li>
+                            <li><strong>DBSCAN:</strong> Density-based clustering.</li>
+                            <li><strong>PCA:</strong> Reduces dimensions.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="info-grid">
-            <div class="explanation-panel">
-                <h3><i class="fas fa-book-open"></i> Explanation</h3>
-                <div id="explanation"></div>
+    <!-- History Modal -->
+    <div id="history-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-history"></i> Execution History</h3>
+                <button class="modal-close" onclick="hideModal('history-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-
-            <div class="code-panel">
-                <h3><i class="fas fa-code"></i> Code Snippet</h3>
-                <pre id="code"><code class="language-python"></code></pre>
-            </div>
-        </div>
-
-        <div class="data-panel">
-            <h3><i class="fas fa-table"></i> Data Preview & Edit</h3>
-            <div id="data-preview">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Feature 1</th>
-                            <th>Feature 2</th>
-                            <th>Label</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>5.1</td>
-                            <td>3.5</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>4.9</td>
-                            <td>3.0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>7.0</td>
-                            <td>3.2</td>
-                            <td>1</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="modal-body">
+                <div id="execution-history">
+                    <p class="text-center text-gray-500 my-4">No execution history yet</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="help-panel">
-            <h3><i class="fas fa-question-circle"></i> Help Center</h3>
-            <div>
-                <p><strong>How to Use:</strong> Upload a CSV, select inputs and label, choose an algorithm, tweak parameters, and run. Use cross-validation, grid search, or edit data points.</p>
-                <p><strong>Supervised Algorithms:</strong></p>
-                <ul>
-                    <li><strong>Linear Regression:</strong> Predicts continuous values with a line.</li>
-                    <li><strong>Logistic Regression:</strong> Classifies binary outcomes.</li>
-                    <li><strong>Decision Tree:</strong> Splits data for prediction.</li>
-                    <li><strong>Random Forest:</strong> Ensemble of trees.</li>
-                    <li><strong>SVM:</strong> Separates data with a hyperplane.</li>
-                </ul>
-                <p><strong>Unsupervised Algorithms:</strong></p>
-                <ul>
-                    <li><strong>K-Means:</strong> Groups data into k clusters.</li>
-                    <li><strong>DBSCAN:</strong> Density-based clustering.</li>
-                    <li><strong>PCA:</strong> Reduces dimensions.</li>
-                </ul>
+    <!-- Team Modal -->
+    <div id="team-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-users"></i> Team Collaboration</h3>
+                <button class="modal-close" onclick="hideModal('team-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Collaborate with your team members to analyze data and build models together.</p>
+                
+                <h4 class="text-xl font-semibold mt-4 mb-2">Team Members</h4>
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=4361ee&color=fff" alt="John Doe">
+                        <span>John Doe</span>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=4895ef&color=fff" alt="Jane Smith">
+                        <span>Jane Smith</span>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://ui-avatars.com/api/?name=Mike+Johnson&background=3a0ca3&color=fff" alt="Mike Johnson">
+                        <span>Mike Johnson</span>
+                    </div>
+                    <div class="team-member add">
+                        <button>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <span>Add Member</span>
+                    </div>
+                </div>
+                
+                <h4 class="text-xl font-semibold mt-6 mb-2">Shared Projects</h4>
+                <div class="projects-list">
+                    <div class="history-item">
+                        <div class="history-header">
+                            <div class="history-title">Sales Forecast Model</div>
+                            <div class="history-date">2023-04-12</div>
+                        </div>
+                        <div class="history-badges">
+                            <span class="badge primary">linear</span>
+                            <span class="badge">125 data points</span>
+                            <span class="badge secondary">Shared</span>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-header">
+                            <div class="history-title">Customer Segmentation</div>
+                            <div class="history-date">2023-03-28</div>
+                        </div>
+                        <div class="history-badges">
+                            <span class="badge primary">kmeans</span>
+                            <span class="badge">342 data points</span>
+                            <span class="badge secondary">Shared</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModal('team-modal')">Close</button>
+                <button onclick="shareWithTeam()">Share Current Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-export"></i> Export & Share</h3>
+                <button class="modal-close" onclick="hideModal('export-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Export your model or visualization for integration with other systems.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-gray-100 p-4 rounded-lg text-center hover:bg-gray-200 cursor-pointer" onclick="exportModel()">
+                        <i class="fas fa-file-code text-4xl text-blue-600 mb-2"></i>
+                        <h4 class="font-medium">JavaScript Module</h4>
+                        <p class="text-sm text-gray-600">Export model as a JS module</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg text-center hover:bg-gray-200 cursor-pointer" onclick="downloadViz()">
+                        <i class="fas fa-file-image text-4xl text-green-600 mb-2"></i>
+                        <h4 class="font-medium">Visualization</h4>
+                        <p class="text-sm text-gray-600">Download as SVG/PNG</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg text-center hover:bg-gray-200 cursor-pointer">
+                        <i class="fas fa-file-csv text-4xl text-yellow-600 mb-2"></i>
+                        <h4 class="font-medium">Results CSV</h4>
+                        <p class="text-sm text-gray-600">Export results as CSV</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg text-center hover:bg-gray-200 cursor-pointer">
+                        <i class="fas fa-code text-4xl text-purple-600 mb-2"></i>
+                        <h4 class="font-medium">Python Code</h4>
+                        <p class="text-sm text-gray-600">Export complete code</p>
+                    </div>
+                </div>
+                
+                <h4 class="text-xl font-semibold mt-6 mb-2">Share Options</h4>
+                <div class="flex flex-wrap gap-4 mt-2">
+                    <button class="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-slack"></i> Slack
+                    </button>
+                    <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </button>
+                    <button class="flex items-center gap-2 bg-blue-400 text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </button>
+                    <button class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-github"></i> GitHub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insights Modal -->
+    <div id="insights-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-lightbulb"></i> Data Insights</h3>
+                <button class="modal-close" onclick="hideModal('insights-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Gain deeper insights into your data with automated analysis.</p>
+                
+                <div id="data-statistics" class="mt-4">
+                    <h4 class="text-xl font-semibold mb-2">Feature Statistics</h4>
+                    <div id="stats-content" class="grid grid-cols-1 gap-4">
+                        <p class="text-center text-gray-500 my-4">Load data to see statistics</p>
+                    </div>
+                </div>
+                
+                <div id="data-correlations" class="mt-6">
+                    <h4 class="text-xl font-semibold mb-2">Feature Correlations</h4>
+                    <div id="correlation-content">
+                        <p class="text-center text-gray-500 my-4">Load data to see correlations</p>
+                    </div>
+                </div>
+                
+                <div id="data-recommendations" class="mt-6">
+                    <h4 class="text-xl font-semibold mb-2">Recommendations</h4>
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <p>Based on your data characteristics, we recommend trying the following algorithms:</p>
+                        <ul class="list-disc ml-6 mt-2">
+                            <li>K-Means Clustering for natural groupings</li>
+                            <li>Random Forest for prediction with high accuracy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> Settings</h3>
+                <button class="modal-close" onclick="hideModal('settings-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h4 class="text-lg font-semibold mb-3">Interface</h4>
+                    <div class="flex items-center justify-between mb-4">
+                        <label for="theme-setting">Dark Theme</label>
+                        <div class="relative inline-block w-12 align-middle select-none">
+                            <input type="checkbox" id="theme-setting" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="theme-setting" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <label for="notifications-setting">Notifications</label>
+                        <div class="relative inline-block w-12 align-middle select-none">
+                            <input type="checkbox" id="notifications-setting" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                            <label for="notifications-setting" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group mt-6">
+                    <h4 class="text-lg font-semibold mb-3">Data Handling</h4>
+                    <div class="flex items-center justify-between mb-4">
+                        <label for="autosave-setting">Auto-save Results</label>
+                        <div class="relative inline-block w-12 align-middle select-none">
+                            <input type="checkbox" id="autosave-setting" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                            <label for="autosave-setting" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="max-history" class="block mb-2">Maximum History Items</label>
+                        <select id="max-history" class="w-full p-2 border border-gray-300 rounded">
+                            <option value="10">10 items</option>
+                            <option value="20" selected>20 items</option>
+                            <option value="50">50 items</option>
+                            <option value="100">100 items</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-group mt-6">
+                    <h4 class="text-lg font-semibold mb-3">Performance</h4>
+                    <div class="mb-4">
+                        <label for="visualization-quality" class="block mb-2">Visualization Quality</label>
+                        <select id="visualization-quality" class="w-full p-2 border border-gray-300 rounded">
+                            <option value="low">Low (Faster)</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High (Slower)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModal('settings-modal')">Cancel</button>
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Modal -->
+    <div id="subscription-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fas fa-crown"></i> Subscription Plans</h3>
+                <button class="modal-close" onclick="hideModal('subscription-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Upgrade your account to access premium features and enhance your ML experience.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div class="border rounded-lg overflow-hidden">
+                        <div class="bg-gray-100 p-4 text-center">
+                            <h4 class="text-xl font-semibold">Free</h4>
+                            <div class="text-2xl font-bold mt-2">$0<span class="text-sm font-normal">/month</span></div>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Basic ML algorithms</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 2D visualizations</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Limited history (10 items)</li>
+                                <li class="flex items-center"><i class="fas fa-times text-red-500 mr-2"></i> No team collaboration</li>
+                                <li class="flex items-center"><i class="fas fa-times text-red-500 mr-2"></i> No advanced features</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 text-center">
+                            <button class="bg-gray-500 text-white px-4 py-2 rounded">Current Plan</button>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg overflow-hidden border-blue-500 shadow-lg">
+                        <div class="bg-blue-500 text-white p-4 text-center">
+                            <h4 class="text-xl font-semibold">Pro</h4>
+                            <div class="text-2xl font-bold mt-2">$9.99<span class="text-sm font-normal">/month</span></div>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> All ML algorithms</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 2D & 3D visualizations</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Extended history (50 items)</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Basic team collaboration</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Model export</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 text-center">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Upgrade Now</button>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg overflow-hidden">
+                        <div class="bg-gray-800 text-white p-4 text-center">
+                            <h4 class="text-xl font-semibold">Enterprise</h4>
+                            <div class="text-2xl font-bold mt-2">$29.99<span class="text-sm font-normal">/month</span></div>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> All Pro features</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Unlimited history</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Advanced team collaboration</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Data insights & recommendations</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Priority support</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 text-center">
+                            <button class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900">Contact Sales</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="/static/script.js"></script>
     <script src="/static/scripts.js"></script>
+    <script src="/static/saas-features.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Python 3.12 virtualenv at C:\projects\ml_env" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="ml_env" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="d3.v7" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
