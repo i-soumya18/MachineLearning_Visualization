@@ -1135,3 +1135,133 @@
 2025-03-27 08:24:24,443 - INFO - 127.0.0.1 - - [27/Mar/2025 08:24:24] "POST /fit HTTP/1.1" 200 -
 2025-03-27 08:24:30,799 - INFO - Linear Regression: {'mse': 707297318153.5283, 'r2': 0.20606362350394625}
 2025-03-27 08:24:30,799 - INFO - 127.0.0.1 - - [27/Mar/2025 08:24:30] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:30:05,632 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-27 08:30:05,632 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-27 08:30:07,854 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:07] "GET / HTTP/1.1" 200 -
+2025-03-27 08:30:07,949 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:07] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-03-27 08:30:07,954 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:07] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-27 08:30:07,958 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:07] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-27 08:30:08,054 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-27 08:30:24,566 - INFO - Iris scenario loaded
+2025-03-27 08:30:24,566 - INFO - 127.0.0.1 - - [27/Mar/2025 08:30:24] "GET /scenario HTTP/1.1" 200 -
+2025-03-27 08:31:02,758 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:02] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:02,788 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:02] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-27 08:31:02,789 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:02] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:02,790 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:02] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-03-27 08:31:04,047 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:04,060 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,063 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,067 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,709 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:04,723 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,726 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,730 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,894 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:04,911 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,918 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:04,920 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:04] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:05,072 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:05] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:05,088 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:31:05,091 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:05] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:05,094 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:05] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:43,295 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:43] "GET / HTTP/1.1" 200 -
+2025-03-27 08:31:43,308 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:31:43,314 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:43] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:31:43,315 - INFO - 127.0.0.1 - - [27/Mar/2025 08:31:43] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:32:44,689 - INFO - K-Means: Silhouette=0.6085267778436487
+2025-03-27 08:32:44,691 - INFO - 127.0.0.1 - - [27/Mar/2025 08:32:44] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:01,673 - INFO - K-Means: Silhouette=0.6085267778436487
+2025-03-27 08:33:01,675 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:01] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:08,856 - INFO - K-Means: Silhouette=0.6073971121459952
+2025-03-27 08:33:08,858 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:08] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:20,604 - INFO - K-Means: Silhouette=0.6073971121459952
+2025-03-27 08:33:20,607 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:20] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:26,255 - ERROR - Fit endpoint error: This LinearRegression estimator requires y to be passed, but the target y is None.
+2025-03-27 08:33:26,256 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:26] "[31m[1mPOST /fit HTTP/1.1[0m" 400 -
+2025-03-27 08:33:34,905 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:33:34,906 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:34] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:45,460 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:33:45,460 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:45] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:51,410 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:33:51,410 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:51] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:33:55,841 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:33:55,841 - INFO - 127.0.0.1 - - [27/Mar/2025 08:33:55] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:11,547 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:34:11,548 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:11] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:25,145 - INFO - Linear Regression: {'mse': 814123989693.7648, 'r2': 0.0861514192032089}
+2025-03-27 08:34:25,146 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:25] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:31,620 - INFO - Linear Regression: {'mse': 702696146363.9113, 'r2': 0.21122840720172842, 'cv_mse': np.float64(708282071587.1953), 'cv_r2': np.float64(0.4025813896480632)}
+2025-03-27 08:34:31,621 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:31] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:32,442 - INFO - Linear Regression: {'mse': 702696146363.9113, 'r2': 0.21122840720172842, 'cv_mse': np.float64(708282071587.1953), 'cv_r2': np.float64(0.4025813896480632)}
+2025-03-27 08:34:32,443 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:32] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:35,898 - INFO - Linear Regression: {'mse': 702696146363.9113, 'r2': 0.21122840720172842}
+2025-03-27 08:34:35,898 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:35] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:44,018 - INFO - Linear Regression: {'mse': 702696146363.9113, 'r2': 0.21122840720172842}
+2025-03-27 08:34:44,019 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:44] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:34:49,076 - INFO - Linear Regression: {'mse': 702696146363.9113, 'r2': 0.21122840720172842}
+2025-03-27 08:34:49,076 - INFO - 127.0.0.1 - - [27/Mar/2025 08:34:49] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:35:21,879 - INFO - Encoded categorical labels for logistic
+2025-03-27 08:35:25,973 - INFO - Logistic Regression: {'accuracy': 0.01636904761904762}
+2025-03-27 08:35:25,974 - INFO - 127.0.0.1 - - [27/Mar/2025 08:35:25] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:35:35,538 - INFO - Encoded categorical labels for logistic
+2025-03-27 08:35:39,623 - INFO - Logistic Regression: {'accuracy': 0.01636904761904762}
+2025-03-27 08:35:39,623 - INFO - 127.0.0.1 - - [27/Mar/2025 08:35:39] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:35:42,309 - INFO - Encoded categorical labels for logistic
+2025-03-27 08:35:46,424 - INFO - Logistic Regression: {'accuracy': 0.01636904761904762}
+2025-03-27 08:35:46,424 - INFO - 127.0.0.1 - - [27/Mar/2025 08:35:46] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:35:52,199 - INFO - Encoded categorical labels for logistic
+2025-03-27 08:35:56,425 - INFO - Logistic Regression: {'accuracy': 0.01636904761904762}
+2025-03-27 08:35:56,425 - INFO - 127.0.0.1 - - [27/Mar/2025 08:35:56] "POST /fit HTTP/1.1" 200 -
+2025-03-27 08:36:04,600 - ERROR - Grid search error: Parameter grid for parameter 'is_classification' needs to be a list or a numpy array, but got False (of type bool) instead. Single values need to be wrapped in a list with one element.
+2025-03-27 08:36:04,600 - INFO - 127.0.0.1 - - [27/Mar/2025 08:36:04] "[35m[1mPOST /grid_search HTTP/1.1[0m" 500 -
+2025-03-27 08:48:09,056 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:09] "GET / HTTP/1.1" 200 -
+2025-03-27 08:48:09,086 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:09] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-27 08:48:09,088 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:09] "GET /static/script.js HTTP/1.1" 200 -
+2025-03-27 08:48:09,089 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:09] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-03-27 08:48:09,242 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:09] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-27 08:48:12,442 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:12] "GET / HTTP/1.1" 200 -
+2025-03-27 08:48:12,462 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:12] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:12,464 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:48:12,468 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:12] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:13,315 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:13] "GET / HTTP/1.1" 200 -
+2025-03-27 08:48:13,330 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-03-27 08:48:13,333 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:13] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:13,335 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:13] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:16,604 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:16] "GET / HTTP/1.1" 200 -
+2025-03-27 08:48:16,624 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:16] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-27 08:48:16,626 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:16] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:16,628 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:16] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:36,460 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:36] "GET / HTTP/1.1" 200 -
+2025-03-27 08:48:36,483 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:36] "GET /static/style.css HTTP/1.1" 200 -
+2025-03-27 08:48:36,484 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:36] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-03-27 08:48:36,486 - INFO - 127.0.0.1 - - [27/Mar/2025 08:48:36] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-04-11 11:20:52,627 - INFO - Starting ML Insight Lab application
+2025-04-11 11:20:52,639 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.29.36.151:5000
+2025-04-11 11:20:52,640 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 11:20:52,646 - INFO -  * Restarting with watchdog (inotify)
+2025-04-11 11:20:53,212 - INFO - Starting ML Insight Lab application
+2025-04-11 11:20:53,216 - WARNING -  * Debugger is active!
+2025-04-11 11:20:53,217 - INFO -  * Debugger PIN: 122-140-748
+2025-04-11 11:21:30,798 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:30] "GET / HTTP/1.1" 200 -
+2025-04-11 11:21:30,848 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:30] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-04-11 11:21:30,850 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:30] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:21:30,851 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:30] "GET /static/script.js HTTP/1.1" 200 -
+2025-04-11 11:21:31,536 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-11 11:21:31,854 - INFO - 127.0.0.1 - - [11/Apr/2025 11:21:31] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -
+2025-04-11 11:22:45,364 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:22:45,367 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:22:45,375 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,376 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,414 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:22:45,420 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,421 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,424 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,689 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:22:45,692 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-04-11 11:22:45,695 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:45,704 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:45] "GET /static/style.css HTTP/1.1" 200 -
+2025-04-11 11:22:46,383 - INFO - 127.0.0.1 - - [11/Apr/2025 11:22:46] "[33mGET /service-worker.js HTTP/1.1[0m" 404 -

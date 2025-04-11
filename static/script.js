@@ -198,15 +198,43 @@ function updateDataFromColumns() {
     try {
         const numInputs = parseInt(document.getElementById('num-inputs').value);
         const labelCol = document.getElementById('label-col').value;
+        
+        // First pass - detect categorical columns and create mappings
+        const categoricalMappings = {};
+        for (let i = 0; i < numInputs; i++) {
+            const col = document.getElementById(`input-${i}`).value;
+            const values = rawData.map(row => row[col]);
+            
+            // Check if this column contains non-numeric data
+            if (values.some(v => isNaN(+v))) {
+                // This is a categorical column, create a mapping
+                const uniqueValues = [...new Set(values)];
+                categoricalMappings[col] = Object.fromEntries(
+                    uniqueValues.map((val, index) => [val, index])
+                );
+            }
+        }
+        
+        // Second pass - convert data using mappings
         data = rawData.map(row => {
             const X = [];
             for (let i = 0; i < numInputs; i++) {
                 const col = document.getElementById(`input-${i}`).value;
-                X.push(+row[col]);
+                if (categoricalMappings[col]) {
+                    // Use the mapping for categorical data
+                    X.push(categoricalMappings[col][row[col]]);
+                } else {
+                    // Regular numeric conversion
+                    X.push(+row[col]);
+                }
             }
             return { X, label: labelCol ? row[labelCol] : null };
         });
-        if (data.some(d => d.X.some(v => isNaN(v)))) throw new Error("Selected input columns contain non-numeric data");
+        
+        // The check below is no longer needed since we handle categorical data
+        // if (data.some(d => d.X.some(v => isNaN(v)))) throw new Error("Selected input columns contain non-numeric data");
+        
+        // Update scales for visualization
         xScale.domain([d3.min(data, d => d.X[0]), d3.max(data, d => d.X[0])]);
         yScale.domain([d3.min(data, d => d.X[1]), d3.max(data, d => d.X[1])]);
         colorScale.domain([...new Set(data.map(d => d.label))].filter(l => l !== null));
