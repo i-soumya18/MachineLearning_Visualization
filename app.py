@@ -114,9 +114,9 @@ def load_dataset(file_path):
             raise MLInsightException("Failed to load dataset", str(e))
 
 # Helper functions
-def preprocess_data(X, y=None, categorical_features=None, numeric_features=None, normalize=False):
+def preprocess_data(X, y=None, categorical_features=None, numeric_features=None, normalize=False, handle_missing='none'):
     """
-    Preprocess data with handling for categorical features
+    Preprocess data with handling for categorical features and missing values
     Returns preprocessed data and preprocessing objects that can be used for new data
     """
     try:
@@ -128,6 +128,43 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
         
         # Create copies to avoid modifying original data
         X_processed = X.copy()
+        y_processed = y.copy() if y is not None else None
+        
+        # Handle missing values if specified
+        if handle_missing != 'none':
+            if handle_missing == 'drop':
+                # Drop rows with any NaN values
+                if y is not None:
+                    # For supervised learning, we need to keep track of which rows are dropped
+                    valid_indices = ~X_processed.isna().any(axis=1)
+                    X_processed = X_processed[valid_indices]
+                    y_processed = y[valid_indices]
+                else:
+                    X_processed = X_processed.dropna()
+            else:
+                from sklearn.impute import SimpleImputer
+                
+                # Create imputers for numeric and categorical features
+                numeric_imputer = None
+                categorical_imputer = None
+                
+                # Handle numeric features
+                if numeric_features and len(numeric_features) > 0:
+                    strategy = 'mean' if handle_missing == 'mean' else 'median'
+                    numeric_imputer = SimpleImputer(strategy=strategy)
+                    X_processed[numeric_features] = numeric_imputer.fit_transform(X_processed[numeric_features])
+                    preprocessors['numeric_imputer'] = numeric_imputer
+                
+                # Handle categorical features
+                if categorical_features and len(categorical_features) > 0:
+                    categorical_imputer = SimpleImputer(strategy='most_frequent')
+                    # Convert to numpy array, impute, then convert back
+                    cat_data = categorical_imputer.fit_transform(X_processed[categorical_features])
+                    for i, col in enumerate(categorical_features):
+                        X_processed[col] = cat_data[:, i]
+                    preprocessors['categorical_imputer'] = categorical_imputer
+            
+            preprocessors['handle_missing'] = handle_missing
         
         # Process categorical features if any
         if categorical_features and len(categorical_features) > 0:
@@ -148,7 +185,7 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
             X_processed[numeric_features] = scaler.fit_transform(numeric_data)
             preprocessors['scaler'] = scaler
         
-        return X_processed, y, preprocessors
+        return X_processed, y_processed, preprocessors
     except Exception as e:
         if isinstance(e, MLInsightException):
             raise e
@@ -870,6 +907,8 @@ def main():
         st.session_state.temp_file_path = None
     if 'data_types' not in st.session_state:
         st.session_state.data_types = None
+    if 'handle_missing' not in st.session_state:
+        st.session_state.handle_missing = 'none'
         
     # Data Loading Section
     st.header("1. Data Preparation")
@@ -902,6 +941,66 @@ def main():
                     st.write("Numeric Features:", ", ".join(data_types['numeric']) if data_types['numeric'] else "None")
                 with col2:
                     st.write("Categorical Features:", ", ".join(data_types['categorical']) if data_types['categorical'] else "None")
+
+                # Check for missing values
+                missing_values = df.isna().sum().sum()
+                if missing_values > 0:
+                    st.warning(f"⚠️ Dataset contains {missing_values} missing values that need preprocessing!")
+                    
+                    # Add preprocessing options
+                    st.subheader("Data Preprocessing")
+                    with st.expander("Missing Value Handling", expanded=True):
+                        handle_missing_option = st.radio(
+                            "How to handle missing values?",
+                            ["None (Model may fail)", "Drop rows with missing values", "Impute with mean", "Impute with median", "Impute with most frequent"],
+                            index=0,
+                            help="Choose how to handle missing values in your dataset"
+                        )
+                        
+                        # Map options to actual strategies
+                        if handle_missing_option == "None (Model may fail)":
+                            st.session_state.handle_missing = 'none'
+                        elif handle_missing_option == "Drop rows with missing values":
+                            st.session_state.handle_missing = 'drop'
+                        elif handle_missing_option == "Impute with mean":
+                            st.session_state.handle_missing = 'mean'
+                        elif handle_missing_option == "Impute with median":
+                            st.session_state.handle_missing = 'median'
+                        elif handle_missing_option == "Impute with most frequent":
+                            st.session_state.handle_missing = 'most_frequent'
+                        
+                        if handle_missing_option != "None (Model may fail)":
+                            if st.button("Apply Preprocessing"):
+                                with st.spinner("Preprocessing data..."):
+                                    try:
+                                        # Get data types for categorical and numeric features
+                                        cat_features = data_types['categorical']
+                                        num_features = data_types['numeric']
+                                        
+                                        # Apply preprocessing
+                                        processed_df, _, _ = preprocess_data(
+                                            df,
+                                            categorical_features=cat_features,
+                                            numeric_features=num_features,
+                                            handle_missing=st.session_state.handle_missing
+                                        )
+                                        
+                                        # Update session state with processed data
+                                        st.session_state.data = processed_df
+                                        
+                                        # Show success message and processed data
+                                        st.success(f"Successfully preprocessed data using '{handle_missing_option}' strategy")
+                                        st.write("Processed Data Preview:")
+                                        st.dataframe(processed_df.head())
+                                        
+                                        # Display missing values after preprocessing
+                                        missing_after = processed_df.isna().sum().sum()
+                                        if missing_after > 0:
+                                            st.warning(f"There are still {missing_after} missing values in the dataset.")
+                                        else:
+                                            st.info("All missing values have been handled!")
+                                    except Exception as e:
+                                        st.error(f"Error during preprocessing: {str(e)}")
                 
             except MLInsightException as e:
                 st.error(f"Error: {e.message}")

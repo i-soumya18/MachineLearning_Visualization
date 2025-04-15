@@ -4,6 +4,7 @@ streamlit
 scikit-learn
 plotly
 matplotlib
+seaborn
 uuid
 pillow
 datetime
