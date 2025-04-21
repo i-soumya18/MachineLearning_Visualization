@@ -20,6 +20,11 @@ import datetime
 import atexit
 import shutil
 
+# Import custom modules
+from eda_utils import run_eda
+from visualization_utils import create_advanced_visualizations
+from training_utils import train_with_progress
+
 # Configure logging
 logging.basicConfig(filename='ml_insight_lab.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -66,10 +71,38 @@ class MLInsightException(Exception):
 
 # Helper functions for data handling
 def detect_data_types(df):
-    """Detect and categorize columns by data type"""
+    """Detect and categorize columns by data type with enhanced handling for mixed types"""
+    # Initial categorization based on pandas dtypes
     numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
     categorical_cols = df.select_dtypes(include=['object', 'category', 'bool']).columns.tolist()
     date_cols = df.select_dtypes(include=['datetime64']).columns.tolist()
+    
+    # Check for numeric columns that might be stored as strings
+    for col in categorical_cols.copy():
+        # Try to convert to numeric and see if it works
+        try:
+            # Check if column can be converted to numeric
+            pd.to_numeric(df[col], errors='raise')
+            # If successful, move from categorical to numeric
+            numeric_cols.append(col)
+            categorical_cols.remove(col)
+            logging.info(f"Column {col} detected as numeric but stored as string. Converting.")
+        except (ValueError, TypeError):
+            # Keep as categorical if conversion fails
+            pass
+    
+    # Check for date columns that might be stored as strings
+    for col in categorical_cols.copy():
+        try:
+            # Try to parse as datetime
+            pd.to_datetime(df[col], errors='raise')
+            # If successful, move from categorical to date
+            date_cols.append(col)
+            categorical_cols.remove(col)
+            logging.info(f"Column {col} detected as date but stored as string. Converting.")
+        except (ValueError, TypeError):
+            # Keep as categorical if conversion fails
+            pass
     
     return {
         'numeric': numeric_cols,
@@ -93,18 +126,44 @@ def save_uploaded_file(uploaded_file):
         raise MLInsightException("Failed to save uploaded file", str(e))
 
 def load_dataset(file_path):
-    """Load dataset from file with type detection"""
+    """Load dataset from file with enhanced type detection and conversion"""
     try:
         file_ext = os.path.splitext(file_path)[1].lower()
         
         if file_ext == '.csv':
-            df = pd.read_csv(file_path)
+            # First try to infer data types automatically
+            try:
+                df = pd.read_csv(file_path, dtype=None)
+            except Exception as e:
+                logging.warning(f"Error with automatic type inference: {str(e)}")
+                # If that fails, read everything as string first
+                df = pd.read_csv(file_path, dtype=str)
+                
+                # Then try to convert columns to appropriate types
+                for col in df.columns:
+                    # Try numeric conversion
+                    try:
+                        numeric_series = pd.to_numeric(df[col], errors='raise')
+                        df[col] = numeric_series
+                        logging.info(f"Converted column {col} to numeric")
+                    except (ValueError, TypeError):
+                        # Try datetime conversion
+                        try:
+                            date_series = pd.to_datetime(df[col], errors='raise')
+                            df[col] = date_series
+                            logging.info(f"Converted column {col} to datetime")
+                        except (ValueError, TypeError):
+                            # Keep as string/object
+                            pass
         elif file_ext in ['.xls', '.xlsx']:
             df = pd.read_excel(file_path)
         elif file_ext == '.json':
             df = pd.read_json(file_path)
         else:
             raise MLInsightException(f"Unsupported file format: {file_ext}")
+        
+        # Log data types for debugging
+        logging.info(f"Dataset loaded with dtypes: {df.dtypes}")
         
         return df
     except Exception as e:
@@ -122,6 +181,12 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
     try:
         preprocessors = {}
         
+        # Store feature types for later use
+        if categorical_features:
+            preprocessors['categorical_features'] = categorical_features
+        if numeric_features:
+            preprocessors['numeric_features'] = numeric_features
+        
         # Handle empty or None inputs
         if X is None or X.size == 0:
             raise MLInsightException("No data provided for preprocessing")
@@ -129,6 +194,15 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
         # Create copies to avoid modifying original data
         X_processed = X.copy()
         y_processed = y.copy() if y is not None else None
+        
+        # Convert numeric features that might be stored as strings
+        if numeric_features and len(numeric_features) > 0:
+            for col in numeric_features:
+                if col in X_processed.columns:
+                    try:
+                        X_processed[col] = pd.to_numeric(X_processed[col], errors='coerce')
+                    except Exception as e:
+                        logging.warning(f"Could not convert column {col} to numeric: {str(e)}")
         
         # Handle missing values if specified
         if handle_missing != 'none':
@@ -152,6 +226,11 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
                 if numeric_features and len(numeric_features) > 0:
                     strategy = 'mean' if handle_missing == 'mean' else 'median'
                     numeric_imputer = SimpleImputer(strategy=strategy)
+                    # Make sure numeric features are actually numeric
+                    for col in numeric_features:
+                        if col in X_processed.columns and X_processed[col].dtype == 'object':
+                            X_processed[col] = pd.to_numeric(X_processed[col], errors='coerce')
+                    
                     X_processed[numeric_features] = numeric_imputer.fit_transform(X_processed[numeric_features])
                     preprocessors['numeric_imputer'] = numeric_imputer
                 
@@ -173,17 +252,58 @@ def preprocess_data(X, y=None, categorical_features=None, numeric_features=None,
             for cat_col in categorical_features:
                 if cat_col in X_processed.columns:
                     le = LabelEncoder()
+                    # Store original values before encoding to handle unseen values later
+                    unique_values = X_processed[cat_col].astype(str).unique()
+                    # Fit the encoder
                     X_processed[cat_col] = le.fit_transform(X_processed[cat_col].astype(str))
                     label_encoders[cat_col] = le
+                    # Log the mapping for debugging
+                    mapping = {str(val): idx for idx, val in enumerate(le.classes_)}
+                    logging.info(f"Label encoding for {cat_col}: {mapping}")
             
             preprocessors['label_encoders'] = label_encoders
         
         # Normalize numeric features if requested
         if normalize and numeric_features and len(numeric_features) > 0:
             scaler = StandardScaler()
+            # Ensure all numeric features are float type before scaling
+            for col in numeric_features:
+                if col in X_processed.columns:
+                    X_processed[col] = X_processed[col].astype(float)
+            
             numeric_data = X_processed[numeric_features].values
             X_processed[numeric_features] = scaler.fit_transform(numeric_data)
             preprocessors['scaler'] = scaler
+        
+        # Handle target variable (y) type conversion if needed
+        if y_processed is not None:
+            try:
+                # Try to convert y to numeric if it's not already
+                if not pd.api.types.is_numeric_dtype(y_processed):
+                    # Check if it's categorical and needs encoding
+                    if pd.api.types.is_object_dtype(y_processed) or pd.api.types.is_categorical_dtype(y_processed):
+                        # Try numeric conversion first
+                        try:
+                            y_processed = pd.to_numeric(y_processed, errors='raise')
+                            preprocessors['y_conversion'] = 'numeric'
+                        except (ValueError, TypeError):
+                            # If numeric conversion fails, use label encoding
+                            le = LabelEncoder()
+                            # Store original values before encoding
+                            unique_values = y_processed.astype(str).unique()
+                            # Fit the encoder
+                            y_processed = le.fit_transform(y_processed.astype(str))
+                            preprocessors['y_encoder'] = le
+                            preprocessors['y_conversion'] = 'label_encoded'
+                            # Log the mapping for debugging
+                            mapping = {str(val): idx for idx, val in enumerate(le.classes_)}
+                            logging.info(f"Label encoding for target: {mapping}")
+            except Exception as e:
+                logging.error(f"Error converting target variable: {str(e)}")
+                raise MLInsightException("Failed to convert target variable", str(e))
+        
+        # Store column names for later use
+        preprocessors['feature_names'] = X.columns.tolist()
         
         return X_processed, y_processed, preprocessors
     except Exception as e:
@@ -269,26 +389,90 @@ def run_cross_validation(X, y, algo, params, k_folds=5):
 
 # ML Model Functions with error handling
 def linear_regression(X, y, cv=False):
-    """Linear regression with error handling"""
+    """Linear regression with enhanced error handling for type conversion"""
     try:
         if not isinstance(X, pd.DataFrame):
             X = pd.DataFrame(X)
         
+        # Log initial data types for debugging
+        logging.info(f"Initial X data types: {X.dtypes}")
+        if isinstance(y, pd.Series):
+            logging.info(f"Initial y data type: {y.dtype}")
+        
+        # Try to convert y to numeric if it's not already
+        if isinstance(y, pd.Series) and not pd.api.types.is_numeric_dtype(y):
+            try:
+                y = pd.to_numeric(y, errors='coerce')
+                # Drop rows where y is NaN after conversion
+                valid_indices = ~y.isna()
+                X = X.loc[valid_indices]
+                y = y.loc[valid_indices]
+                logging.info(f"Converted y to numeric and dropped {(~valid_indices).sum()} invalid rows")
+            except Exception as e:
+                raise MLInsightException("Target variable must be numeric for linear regression", str(e))
+        
+        # Detect data types after potential conversions
         data_types = detect_data_types(X)
-        X_proc, y, preprocessors = preprocess_data(
+        
+        # Handle missing values with mean imputation for regression
+        X_proc, y_proc, preprocessors = preprocess_data(
             X, y, 
             categorical_features=data_types['categorical'],
             numeric_features=data_types['numeric'],
-            normalize=True
+            normalize=True,
+            handle_missing='mean'  # Use mean imputation for regression
         )
         
+        # Verify that all features are numeric after preprocessing
+        for col in X_proc.columns:
+            if not pd.api.types.is_numeric_dtype(X_proc[col]):
+                X_proc[col] = pd.to_numeric(X_proc[col], errors='coerce')
+                logging.warning(f"Forced numeric conversion for column {col}")
+        
+        # Check for NaN values after preprocessing
+        if X_proc.isna().any().any() or (isinstance(y_proc, pd.Series) and y_proc.isna().any()):
+            # Drop rows with NaN values as a last resort
+            valid_indices = ~X_proc.isna().any(axis=1)
+            if isinstance(y_proc, pd.Series):
+                valid_indices = valid_indices & ~y_proc.isna()
+            
+            X_proc = X_proc.loc[valid_indices]
+            if isinstance(y_proc, pd.Series):
+                y_proc = y_proc.loc[valid_indices]
+            else:
+                y_proc = y_proc[valid_indices]
+            
+            logging.warning(f"Dropped {(~valid_indices).sum()} rows with NaN values after preprocessing")
+        
+        # Fit the model with progress tracking
         model = LinearRegression()
-        model.fit(X_proc, y)
-        y_pred = model.predict(X_proc)
-        metrics = {'mse': mean_squared_error(y, y_pred), 'r2': r2_score(y, y_pred)}
+        
+        # Check if we should use interactive training with progress bar
+        use_progress = st.checkbox("Show training progress", value=True)
+        
+        if use_progress:
+            # Use the progress tracking training
+            epochs = st.slider("Number of training iterations", 5, 50, 10)
+            batch_size = st.slider("Batch size", 10, min(1000, len(X_proc)), min(100, len(X_proc)))
+            
+            # Train with progress
+            model, train_metrics, history = train_with_progress(
+                model, X_proc, y_proc, 
+                is_classification=False,
+                epochs=epochs,
+                batch_size=batch_size
+            )
+            
+            # Use the metrics from training
+            metrics = train_metrics
+        else:
+            # Standard training without progress tracking
+            model.fit(X_proc, y_proc)
+            y_pred = model.predict(X_proc)
+            metrics = {'mse': mean_squared_error(y_proc, y_pred), 'r2': r2_score(y_proc, y_pred)}
         
         if cv:
-            cv_metrics = run_cross_validation(X_proc, y, 'linear', {})
+            cv_metrics = run_cross_validation(X_proc, y_proc, 'linear', {})
             metrics.update({f'cv_{k}': v for k, v in cv_metrics.items()})
             
         logging.info(f"Linear Regression: {metrics}")
@@ -300,31 +484,83 @@ def linear_regression(X, y, cv=False):
             raise MLInsightException("Linear regression failed", str(e))
 
 def logistic_regression(X, y, lr=0.01, cv=False):
-    """Logistic regression with error handling"""
+    """Logistic regression with enhanced error handling for type conversion"""
     try:
         if not isinstance(X, pd.DataFrame):
             X = pd.DataFrame(X)
-            
+        
+        # Log initial data types for debugging
+        logging.info(f"Initial X data types: {X.dtypes}")
+        if isinstance(y, pd.Series):
+            logging.info(f"Initial y data type: {y.dtype}")
+        
+        # Detect data types
         data_types = detect_data_types(X)
-        X_proc, y, preprocessors = preprocess_data(
+        
+        # Handle missing values with most_frequent imputation for classification
+        X_proc, y_proc, preprocessors = preprocess_data(
             X, y, 
             categorical_features=data_types['categorical'],
             numeric_features=data_types['numeric'],
-            normalize=True
+            normalize=True,
+            handle_missing='most_frequent'  # Use most frequent imputation for classification
         )
         
-        model = LogisticRegression(C=1/lr, max_iter=1000, solver='liblinear', random_state=42)
-        model.fit(X_proc, y)
-        y_pred = model.predict(X_proc)
+        # Verify that all features are numeric after preprocessing
+        for col in X_proc.columns:
+            if not pd.api.types.is_numeric_dtype(X_proc[col]):
+                X_proc[col] = pd.to_numeric(X_proc[col], errors='coerce')
+                logging.warning(f"Forced numeric conversion for column {col}")
         
-        metrics = {
-            'accuracy': accuracy_score(y, y_pred),
-            'confusion_matrix': confusion_matrix(y, y_pred).tolist(),
-            'classification_report': classification_report(y, y_pred, output_dict=True)
-        }
+        # Check for NaN values after preprocessing
+        if X_proc.isna().any().any() or (isinstance(y_proc, pd.Series) and y_proc.isna().any()):
+            # Drop rows with NaN values as a last resort
+            valid_indices = ~X_proc.isna().any(axis=1)
+            if isinstance(y_proc, pd.Series):
+                valid_indices = valid_indices & ~y_proc.isna()
+            
+            X_proc = X_proc.loc[valid_indices]
+            if isinstance(y_proc, pd.Series):
+                y_proc = y_proc.loc[valid_indices]
+            else:
+                y_proc = y_proc[valid_indices]
+            
+            logging.warning(f"Dropped {(~valid_indices).sum()} rows with NaN values after preprocessing")
+        
+        # Fit the model with progress tracking
+        model = LogisticRegression(C=1/lr, max_iter=1000, solver='liblinear', random_state=42)
+        
+        # Check if we should use interactive training with progress bar
+        use_progress = st.checkbox("Show training progress", value=True, key="logistic_progress")
+        
+        if use_progress:
+            # Use the progress tracking training
+            epochs = st.slider("Number of training iterations", 5, 50, 10, key="logistic_epochs")
+            batch_size = st.slider("Batch size", 10, min(1000, len(X_proc)), min(100, len(X_proc)), key="logistic_batch")
+            
+            # Train with progress
+            model, train_metrics, history = train_with_progress(
+                model, X_proc, y_proc, 
+                is_classification=True,
+                epochs=epochs,
+                batch_size=batch_size
+            )
+            
+            # Use the metrics from training
+            metrics = train_metrics
+        else:
+            # Standard training without progress tracking
+            model.fit(X_proc, y_proc)
+            y_pred = model.predict(X_proc)
+            
+            metrics = {
+                'accuracy': accuracy_score(y_proc, y_pred),
+                'confusion_matrix': confusion_matrix(y_proc, y_pred).tolist(),
+                'classification_report': classification_report(y_proc, y_pred, output_dict=True)
+            }
         
         if cv:
-            cv_metrics = run_cross_validation(X_proc, y, 'logistic', {'lr': lr})
+            cv_metrics = run_cross_validation(X_proc, y_proc, 'logistic', {'lr': lr})
             metrics.update({f'cv_{k}': v for k, v in cv_metrics.items()})
             if 'cv_avg_confusion_matrix' in metrics:
                 metrics['cv_avg_confusion_matrix'] = metrics['cv_avg_confusion_matrix'].tolist()
@@ -338,45 +574,110 @@ def logistic_regression(X, y, lr=0.01, cv=False):
             raise MLInsightException("Logistic regression failed", str(e))
 
 def decision_tree(X, y, max_depth=3, is_classification=False, cv=False):
-    """Decision tree with error handling"""
+    """Decision tree with enhanced error handling for type conversion"""
     try:
         if not isinstance(X, pd.DataFrame):
             X = pd.DataFrame(X)
-            
+        
+        # Log initial data types for debugging
+        logging.info(f"Initial X data types: {X.dtypes}")
+        if isinstance(y, pd.Series):
+            logging.info(f"Initial y data type: {y.dtype}")
+        
+        # For regression, try to convert y to numeric if it's not already
+        if not is_classification and isinstance(y, pd.Series) and not pd.api.types.is_numeric_dtype(y):
+            try:
+                y = pd.to_numeric(y, errors='coerce')
+                # Drop rows where y is NaN after conversion
+                valid_indices = ~y.isna()
+                X = X.loc[valid_indices]
+                y = y.loc[valid_indices]
+                logging.info(f"Converted y to numeric and dropped {(~valid_indices).sum()} invalid rows")
+            except Exception as e:
+                raise MLInsightException("Target variable must be numeric for regression", str(e))
+        
+        # Detect data types
         data_types = detect_data_types(X)
-        X_proc, y, preprocessors = preprocess_data(
+        
+        # Choose imputation strategy based on problem type
+        imputation_strategy = 'most_frequent' if is_classification else 'mean'
+        
+        # Preprocess data
+        X_proc, y_proc, preprocessors = preprocess_data(
             X, y, 
             categorical_features=data_types['categorical'],
             numeric_features=data_types['numeric'],
-            normalize=True
+            normalize=True,
+            handle_missing=imputation_strategy
         )
+        
+        # Verify that all features are numeric after preprocessing
+        for col in X_proc.columns:
+            if not pd.api.types.is_numeric_dtype(X_proc[col]):
+                X_proc[col] = pd.to_numeric(X_proc[col], errors='coerce')
+                logging.warning(f"Forced numeric conversion for column {col}")
+        
+        # Check for NaN values after preprocessing
+        if X_proc.isna().any().any() or (isinstance(y_proc, pd.Series) and y_proc.isna().any()):
+            # Drop rows with NaN values as a last resort
+            valid_indices = ~X_proc.isna().any(axis=1)
+            if isinstance(y_proc, pd.Series):
+                valid_indices = valid_indices & ~y_proc.isna()
+            
+            X_proc = X_proc.loc[valid_indices]
+            if isinstance(y_proc, pd.Series):
+                y_proc = y_proc.loc[valid_indices]
+            else:
+                y_proc = y_proc[valid_indices]
+            
+            logging.warning(f"Dropped {(~valid_indices).sum()} rows with NaN values after preprocessing")
         
         # Select model based on problem type
         if is_classification:
             model = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
         else:
             model = DecisionTreeRegressor(max_depth=max_depth, random_state=42)
-            
-        model.fit(X_proc, y)
-        y_pred = model.predict(X_proc)
         
-        # Calculate metrics based on problem type
-        if is_classification:
-            metrics = {
-                'accuracy': accuracy_score(y, y_pred),
-                'confusion_matrix': confusion_matrix(y, y_pred).tolist(),
-                'classification_report': classification_report(y, y_pred, output_dict=True)
-            }
+        # Check if we should use interactive training with progress bar
+        use_progress = st.checkbox("Show training progress", value=True, key="dtree_progress")
+        
+        if use_progress:
+            # Use the progress tracking training
+            epochs = st.slider("Number of training iterations", 5, 50, 10, key="dtree_epochs")
+            batch_size = st.slider("Batch size", 10, min(1000, len(X_proc)), min(100, len(X_proc)), key="dtree_batch")
+            
+            # Train with progress
+            model, train_metrics, history = train_with_progress(
+                model, X_proc, y_proc, 
+                is_classification=is_classification,
+                epochs=epochs,
+                batch_size=batch_size
+            )
+            
+            # Use the metrics from training
+            metrics = train_metrics
         else:
-            metrics = {
-                'mse': mean_squared_error(y, y_pred),
-                'r2': r2_score(y, y_pred)
-            }
+            # Standard training without progress tracking
+            model.fit(X_proc, y_proc)
+            y_pred = model.predict(X_proc)
+            
+            # Calculate metrics based on problem type
+            if is_classification:
+                metrics = {
+                    'accuracy': accuracy_score(y_proc, y_pred),
+                    'confusion_matrix': confusion_matrix(y_proc, y_pred).tolist(),
+                    'classification_report': classification_report(y_proc, y_pred, output_dict=True)
+                }
+            else:
+                metrics = {
+                    'mse': mean_squared_error(y_proc, y_pred),
+                    'r2': r2_score(y_proc, y_pred)
+                }
         
         # Run cross-validation if requested
         if cv:
             cv_metrics = run_cross_validation(
-                X_proc, y, 'dtree', 
+                X_proc, y_proc, 'dtree', 
                 {'depth': max_depth, 'is_classification': is_classification}
             )
             metrics.update({f'cv_{k}': v for k, v in cv_metrics.items()})
@@ -418,22 +719,42 @@ def random_forest(X, y, max_depth=3, n_estimators=10, is_classification=False, c
                 n_estimators=n_estimators,
                 random_state=42
             )
-            
-        model.fit(X_proc, y)
-        y_pred = model.predict(X_proc)
         
-        # Calculate metrics based on problem type
-        if is_classification:
-            metrics = {
-                'accuracy': accuracy_score(y, y_pred),
-                'confusion_matrix': confusion_matrix(y, y_pred).tolist(),
-                'classification_report': classification_report(y, y_pred, output_dict=True)
-            }
+        # Check if we should use interactive training with progress bar
+        use_progress = st.checkbox("Show training progress", value=True, key="rf_progress")
+        
+        if use_progress:
+            # Use the progress tracking training
+            epochs = st.slider("Number of training iterations", 5, 50, 10, key="rf_epochs")
+            batch_size = st.slider("Batch size", 10, min(1000, len(X_proc)), min(100, len(X_proc)), key="rf_batch")
+            
+            # Train with progress
+            model, train_metrics, history = train_with_progress(
+                model, X_proc, y, 
+                is_classification=is_classification,
+                epochs=epochs,
+                batch_size=batch_size
+            )
+            
+            # Use the metrics from training
+            metrics = train_metrics
         else:
-            metrics = {
-                'mse': mean_squared_error(y, y_pred),
-                'r2': r2_score(y, y_pred)
-            }
+            # Standard training without progress tracking
+            model.fit(X_proc, y)
+            y_pred = model.predict(X_proc)
+            
+            # Calculate metrics based on problem type
+            if is_classification:
+                metrics = {
+                    'accuracy': accuracy_score(y, y_pred),
+                    'confusion_matrix': confusion_matrix(y, y_pred).tolist(),
+                    'classification_report': classification_report(y, y_pred, output_dict=True)
+                }
+            else:
+                metrics = {
+                    'mse': mean_squared_error(y, y_pred),
+                    'r2': r2_score(y, y_pred)
+                }
         
         # Run cross-validation if requested
         if cv:
@@ -624,45 +945,282 @@ def make_prediction(model, input_data, preprocessors=None, algo_type=None, is_cl
         if not isinstance(input_data, pd.DataFrame):
             input_data = pd.DataFrame([input_data])
         
+        # Create a copy to avoid modifying the original
+        input_processed = input_data.copy()
+        
+        # Handle missing values in input data
+        for col in input_processed.columns:
+            # Replace NaN values with appropriate values based on column type
+            if input_processed[col].isna().any():
+                logging.warning(f"NaN values detected in prediction input column '{col}'. Handling them.")
+                
+                # For numeric columns, replace with mean or 0
+                if col in preprocessors.get('numeric_features', []):
+                    # If we have a numeric imputer, use its statistics
+                    if 'numeric_imputer' in preprocessors:
+                        # Get the feature index in the imputer
+                        try:
+                            feature_names = preprocessors.get('numeric_features', [])
+                            feature_idx = feature_names.index(col)
+                            replacement_value = preprocessors['numeric_imputer'].statistics_[feature_idx]
+                            input_processed[col] = input_processed[col].fillna(replacement_value)
+                            logging.info(f"Filled NaN in column '{col}' with imputer value: {replacement_value}")
+                        except (ValueError, IndexError):
+                            # Fallback to 0
+                            input_processed[col] = input_processed[col].fillna(0)
+                            logging.info(f"Filled NaN in column '{col}' with 0")
+                    else:
+                        # No imputer, use 0
+                        input_processed[col] = input_processed[col].fillna(0)
+                        logging.info(f"Filled NaN in column '{col}' with 0")
+                
+                # For categorical columns, replace with most frequent value or a placeholder
+                elif col in preprocessors.get('categorical_features', []):
+                    # If we have a categorical imputer, use its statistics
+                    if 'categorical_imputer' in preprocessors:
+                        try:
+                            feature_names = preprocessors.get('categorical_features', [])
+                            feature_idx = feature_names.index(col)
+                            replacement_value = preprocessors['categorical_imputer'].statistics_[feature_idx]
+                            input_processed[col] = input_processed[col].fillna(replacement_value)
+                            logging.info(f"Filled NaN in column '{col}' with imputer value: {replacement_value}")
+                        except (ValueError, IndexError):
+                            # Fallback to "unknown"
+                            input_processed[col] = input_processed[col].fillna("unknown")
+                            logging.info(f"Filled NaN in column '{col}' with 'unknown'")
+                    else:
+                        # No imputer, use "unknown"
+                        input_processed[col] = input_processed[col].fillna("unknown")
+                        logging.info(f"Filled NaN in column '{col}' with 'unknown'")
+                else:
+                    # For any other column type, use a generic placeholder
+                    input_processed[col] = input_processed[col].fillna("unknown")
+                    logging.info(f"Filled NaN in column '{col}' with 'unknown'")
+        
         # Apply preprocessing if provided
         if preprocessors:
             # Apply label encoding to categorical features
             if 'label_encoders' in preprocessors:
                 for col, le in preprocessors['label_encoders'].items():
-                    if col in input_data.columns:
-                        input_data[col] = le.transform(input_data[col].astype(str))
+                    if col in input_processed.columns:
+                        try:
+                            # Convert to string and handle unseen labels
+                            input_col_str = input_processed[col].astype(str)
+                            
+                            # Check for unseen labels and handle them
+                            unique_values = input_col_str.unique()
+                            unseen_labels = [val for val in unique_values if val not in le.classes_]
+                            
+                            if unseen_labels:
+                                logging.warning(f"Unseen labels in column '{col}': {unseen_labels}")
+                                
+                                # For unseen labels, replace with the most frequent class
+                                most_frequent_class = le.classes_[0]  # Default to first class
+                                
+                                # Replace unseen values with the most frequent class
+                                for label in unseen_labels:
+                                    input_col_str = input_col_str.replace(label, most_frequent_class)
+                                    logging.info(f"Replaced unseen label '{label}' with '{most_frequent_class}'")
+                            
+                            # Now transform with the encoder
+                            input_processed[col] = le.transform(input_col_str)
+                            
+                        except Exception as e:
+                            logging.error(f"Error encoding column '{col}': {str(e)}")
+                            # Fallback: use the first class for any problematic values
+                            if len(le.classes_) > 0:
+                                fallback_value = le.transform([le.classes_[0]])[0]
+                                input_processed[col] = fallback_value
+                                logging.info(f"Used fallback encoding for column '{col}': {fallback_value}")
             
             # Apply scaling to numeric features
             if 'scaler' in preprocessors:
-                numeric_cols = [col for col in input_data.columns if col in preprocessors.get('numeric_features', [])]
+                numeric_cols = [col for col in input_processed.columns if col in preprocessors.get('numeric_features', [])]
                 if numeric_cols:
-                    input_data[numeric_cols] = preprocessors['scaler'].transform(input_data[numeric_cols])
+                    # Ensure all values are numeric
+                    for col in numeric_cols:
+                        input_processed[col] = pd.to_numeric(input_processed[col], errors='coerce')
+                        # Fill any NaNs that might have been introduced
+                        input_processed[col] = input_processed[col].fillna(0)
+                    
+                    try:
+                        input_processed[numeric_cols] = preprocessors['scaler'].transform(input_processed[numeric_cols])
+                    except Exception as e:
+                        logging.error(f"Error scaling numeric features: {str(e)}")
+                        # If scaling fails, use unscaled values
+                        pass
         
         # Make prediction based on algorithm type
         if algo_type in ['kmeans']:
-            prediction = model.predict(input_data)[0]
+            prediction = model.predict(input_processed)[0]
             return f"Cluster: {prediction}"
         elif is_classification:
             # Get prediction and probability for classification models
-            prediction = model.predict(input_data)[0]
+            prediction = model.predict(input_processed)[0]
             result = {
                 'class': str(prediction)
             }
             
             # Get probabilities if available
             if hasattr(model, 'predict_proba'):
-                probabilities = model.predict_proba(input_data)[0]
-                result['probabilities'] = {
-                    f"Class {i}": f"{prob*100:.2f}%" 
-                    for i, prob in enumerate(probabilities)
-                }
+                try:
+                    probabilities = model.predict_proba(input_processed)[0]
+                    result['probabilities'] = {
+                        f"Class {i}": f"{prob*100:.2f}%" 
+                        for i, prob in enumerate(probabilities)
+                    }
+                except Exception as e:
+                    logging.error(f"Error getting prediction probabilities: {str(e)}")
+                    # Continue without probabilities
             return result
         else:
             # Regression prediction
-            prediction = model.predict(input_data)[0]
+            prediction = model.predict(input_processed)[0]
             return {'value': float(prediction)}
     except Exception as e:
+        logging.error(f"Prediction error: {str(e)}\n{traceback.format_exc()}")
         raise MLInsightException("Prediction failed", str(e))
+
+def train_and_predict(X, y, input_data, features=None, algo="linear", algo_params=None, is_classification=False, cv=False):
+    """
+    Train a model with specified features and make a prediction
+    
+    Parameters:
+    -----------
+    X : DataFrame
+        The feature dataset for training
+    y : array-like
+        The target values for training
+    input_data : dict or DataFrame
+        The input data for prediction
+    features : list, optional
+        List of feature names to use for training. If None, all features are used.
+    algo : str, default="linear"
+        Algorithm to use: "linear", "logistic", "dtree", "rf", "svm", "kmeans", "dbscan", "pca"
+    algo_params : dict, optional
+        Additional parameters for the algorithm
+    is_classification : bool, default=False
+        Whether this is a classification problem
+    cv : bool, default=False
+        Whether to use cross-validation
+        
+    Returns:
+    --------
+    dict
+        Contains 'model', 'metrics', 'preprocessors', and 'prediction' keys
+    """
+    try:
+        if algo_params is None:
+            algo_params = {}
+            
+        # Convert to DataFrame if not already
+        if not isinstance(X, pd.DataFrame):
+            X = pd.DataFrame(X)
+            
+        # Filter features if specified
+        if features is not None and len(features) > 0:
+            # Ensure all requested features exist in the dataset
+            missing_features = [f for f in features if f not in X.columns]
+            if missing_features:
+                raise MLInsightException(
+                    f"Requested features not found in dataset: {', '.join(missing_features)}",
+                    "Please check feature names and try again."
+                )
+            X_filtered = X[features]
+        else:
+            X_filtered = X
+            
+        # Train the model based on algorithm
+        model = None
+        metrics = None
+        preprocessors = None
+        
+        if algo == "linear" or algo == "linear_regression":
+            model, metrics, preprocessors = linear_regression(X_filtered, y, cv=cv)
+        elif algo == "logistic" or algo == "logistic_regression":
+            model, metrics, preprocessors = logistic_regression(
+                X_filtered, y, lr=algo_params.get('lr', 0.01), cv=cv
+            )
+        elif algo == "dtree" or algo == "decision_tree":
+            model, metrics, preprocessors = decision_tree(
+                X_filtered, y, 
+                max_depth=algo_params.get('depth', 3), 
+                is_classification=is_classification,
+                cv=cv
+            )
+        elif algo == "rf" or algo == "random_forest":
+            model, metrics, preprocessors = random_forest(
+                X_filtered, y, 
+                max_depth=algo_params.get('depth', 3),
+                n_estimators=algo_params.get('n_estimators', 10),
+                is_classification=is_classification,
+                cv=cv
+            )
+        elif algo == "svm":
+            model, metrics, preprocessors = svm_model(
+                X_filtered, y,
+                kernel=algo_params.get('kernel', 'rbf'),
+                is_classification=is_classification,
+                cv=cv
+            )
+        elif algo == "kmeans":
+            model, metrics, preprocessors = kmeans_model(
+                X_filtered, k=algo_params.get('k', 3)
+            )
+        elif algo == "dbscan":
+            model, metrics, preprocessors = dbscan_model(
+                X_filtered, 
+                eps=algo_params.get('eps', 0.5), 
+                min_samples=algo_params.get('min_samples', 5)
+            )
+        elif algo == "pca":
+            model, metrics, preprocessors = pca_model(
+                X_filtered, n_components=algo_params.get('n_components', 2)
+            )
+        else:
+            raise MLInsightException(
+                f"Unsupported algorithm: {algo}",
+                "Please choose from: linear, logistic, dtree, rf, svm, kmeans, dbscan, pca"
+            )
+            
+        # Make prediction with the trained model
+        # Convert input_data to DataFrame if it's not already
+        if not isinstance(input_data, pd.DataFrame):
+            if isinstance(input_data, dict):
+                input_data = pd.DataFrame([input_data])
+            else:
+                input_data = pd.DataFrame([input_data])
+                
+        # Ensure input data has the same features as training data
+        for feature in X_filtered.columns:
+            if feature not in input_data.columns:
+                raise MLInsightException(
+                    f"Feature '{feature}' missing from input data",
+                    "Input data must contain all features used for training"
+                )
+                
+        # Make prediction
+        prediction = make_prediction(
+            model,
+            input_data,
+            preprocessors=preprocessors,
+            algo_type=algo,
+            is_classification=is_classification
+        )
+        
+        # Return results
+        return {
+            'model': model,
+            'metrics': metrics,
+            'preprocessors': preprocessors,
+            'prediction': prediction
+        }
+        
+    except Exception as e:
+        if isinstance(e, MLInsightException):
+            raise e
+        else:
+            raise MLInsightException("Train and predict failed", str(e))
 
 # UI Function to create plots
 def create_plot(X, y, model, algo, is_classification=False, preprocessors=None):
@@ -946,6 +1504,12 @@ def main():
                 missing_values = df.isna().sum().sum()
                 if missing_values > 0:
                     st.warning(f"⚠️ Dataset contains {missing_values} missing values that need preprocessing!")
+                
+                # Add EDA section
+                st.header("Exploratory Data Analysis")
+                if st.button("Run Exploratory Data Analysis"):
+                    with st.spinner("Running EDA..."):
+                        run_eda(df)
                     
                     # Add preprocessing options
                     st.subheader("Data Preprocessing")
@@ -1309,90 +1873,284 @@ def main():
                     class_df = class_df.reset_index().rename(columns={'index': 'Class'})
                     st.dataframe(class_df)
             
-            # Create and show visualization
-            if st.session_state.X is not None and st.session_state.X.shape[1] >= 2:
-                st.subheader("Visualization")
-                fig = create_plot(
-                    st.session_state.X, 
-                    st.session_state.get('y'), 
-                    st.session_state.model,
-                    st.session_state.algo,
-                    is_classification=st.session_state.get('is_classification', False),
-                    preprocessors=st.session_state.preprocessors
-                )
+            # Create and show visualizations
+            if st.session_state.X is not None:
+                st.subheader("Visualizations")
                 
-                if fig:
-                    st.plotly_chart(fig, use_container_width=True)
-                else:
-                    st.info("Visualization is not available for this configuration.")
-            else:
-                st.info("At least 2 features are required for visualization.")
+                # Create tabs for basic and advanced visualizations
+                viz_tab1, viz_tab2 = st.tabs(["Basic Visualization", "Advanced Visualizations"])
+                
+                with viz_tab1:
+                    if st.session_state.X.shape[1] >= 2:
+                        fig = create_plot(
+                            st.session_state.X, 
+                            st.session_state.get('y'), 
+                            st.session_state.model,
+                            st.session_state.algo,
+                            is_classification=st.session_state.get('is_classification', False),
+                            preprocessors=st.session_state.preprocessors
+                        )
+                        
+                        if fig:
+                            st.plotly_chart(fig, use_container_width=True)
+                        else:
+                            st.info("Basic visualization is not available for this configuration.")
+                    else:
+                        st.info("At least 2 features are required for basic visualization.")
+                
+                with viz_tab2:
+                    st.write("Explore detailed model visualizations and insights")
+                    
+                    # Use the advanced visualization module
+                    create_advanced_visualizations(
+                        st.session_state.X,
+                        st.session_state.get('y'),
+                        st.session_state.model,
+                        st.session_state.algo,
+                        is_classification=st.session_state.get('is_classification', False),
+                        preprocessors=st.session_state.preprocessors,
+                        metrics=st.session_state.metrics
+                    )
             
             # Prediction section
             st.header("5. Make Predictions")
             
             if st.session_state.feature_columns:
-                st.subheader("Enter Values for Prediction")
+                # Create tabs for different prediction methods
+                pred_tab1, pred_tab2 = st.tabs(["Standard Prediction", "Train & Predict with Features"])
                 
-                # Create input fields for each feature
-                input_values = {}
-                for feature in st.session_state.feature_columns:
-                    # Check if feature is categorical
-                    is_categorical = feature in st.session_state.data_types.get('categorical', [])
+                with pred_tab1:
+                    st.subheader("Enter Values for Prediction")
                     
-                    if is_categorical:
-                        # For categorical features, show a dropdown
-                        unique_values = st.session_state.data[feature].unique().tolist()
-                        input_val = st.selectbox(f"Select value for {feature}", unique_values)
-                    else:
-                        # For numeric features, show a number input
-                        input_val = st.number_input(
-                            f"Enter value for {feature}", 
-                            value=float(st.session_state.X[feature].mean())
-                        )
-                    
-                    input_values[feature] = input_val
-                
-                # Create DataFrame with input values
-                input_df = pd.DataFrame([input_values])
-                
-                # Prediction button
-                if st.button("Predict"):
-                    try:
-                        prediction_result = make_prediction(
-                            st.session_state.model,
-                            input_df,
-                            preprocessors=st.session_state.preprocessors,
-                            algo_type=st.session_state.algo,
-                            is_classification=st.session_state.get('is_classification', False)
-                        )
+                    # Create input fields for each feature
+                    input_values = {}
+                    for feature in st.session_state.feature_columns:
+                        # Check if feature is categorical
+                        is_categorical = feature in st.session_state.data_types.get('categorical', [])
                         
-                        st.success("Prediction completed!")
-                        
-                        # Display prediction result
-                        if isinstance(prediction_result, dict):
-                            if 'class' in prediction_result:
-                                st.write(f"### Predicted Class: {prediction_result['class']}")
-                                
-                                if 'probabilities' in prediction_result:
-                                    st.write("#### Class Probabilities:")
-                                    for class_label, prob in prediction_result['probabilities'].items():
-                                        st.write(f"{class_label}: {prob}")
-                            elif 'value' in prediction_result:
-                                st.write(f"### Predicted Value: {prediction_result['value']:.4f}")
+                        if is_categorical:
+                            # For categorical features, show a dropdown
+                            unique_values = st.session_state.data[feature].unique().tolist()
+                            input_val = st.selectbox(f"Select value for {feature}", unique_values)
                         else:
-                            st.write(f"### {prediction_result}")
+                            # For numeric features, show a number input
+                            input_val = st.number_input(
+                                f"Enter value for {feature}", 
+                                value=float(st.session_state.X[feature].mean()),
+                                key=f"std_pred_{feature}"
+                            )
+                        
+                        input_values[feature] = input_val
+                    
+                    # Create DataFrame with input values
+                    input_df = pd.DataFrame([input_values])
+                    
+                    # Prediction button
+                    if st.button("Predict", key="standard_predict_btn"):
+                        try:
+                            prediction_result = make_prediction(
+                                st.session_state.model,
+                                input_df,
+                                preprocessors=st.session_state.preprocessors,
+                                algo_type=st.session_state.algo,
+                                is_classification=st.session_state.get('is_classification', False)
+                            )
                             
-                    except Exception as e:
-                        error_msg = str(e)
-                        if isinstance(e, MLInsightException):
-                            st.error(f"Error: {e.message}")
-                            if e.details:
-                                st.error(f"Details: {e.details}")
-                        else:
-                            st.error(f"Error making prediction: {error_msg}")
-                        logging.error(f"Prediction error: {error_msg}")
-                        logging.error(traceback.format_exc())
+                            st.success("Prediction completed!")
+                            
+                            # Display prediction result
+                            if isinstance(prediction_result, dict):
+                                if 'class' in prediction_result:
+                                    st.write(f"### Predicted Class: {prediction_result['class']}")
+                                    
+                                    if 'probabilities' in prediction_result:
+                                        st.write("#### Class Probabilities:")
+                                        for class_label, prob in prediction_result['probabilities'].items():
+                                            st.write(f"{class_label}: {prob}")
+                                elif 'value' in prediction_result:
+                                    st.write(f"### Predicted Value: {prediction_result['value']:.4f}")
+                            else:
+                                st.write(f"### {prediction_result}")
+                                
+                        except Exception as e:
+                            error_msg = str(e)
+                            if isinstance(e, MLInsightException):
+                                st.error(f"Error: {e.message}")
+                                if e.details:
+                                    st.error(f"Details: {e.details}")
+                            else:
+                                st.error(f"Error making prediction: {error_msg}")
+                            logging.error(f"Prediction error: {error_msg}")
+                            logging.error(traceback.format_exc())
+                
+                with pred_tab2:
+                    st.subheader("Train with Selected Features & Predict")
+                    
+                    # Feature selection
+                    all_features = st.session_state.feature_columns
+                    selected_features = st.multiselect(
+                        "Select features to use for training", 
+                        all_features,
+                        default=all_features
+                    )
+                    
+                    # Algorithm selection for custom training
+                    algo_options = {
+                        "Linear Regression": "linear",
+                        "Logistic Regression": "logistic",
+                        "Decision Tree": "dtree",
+                        "Random Forest": "rf",
+                        "SVM": "svm",
+                        "K-Means": "kmeans",
+                        "DBSCAN": "dbscan",
+                        "PCA": "pca"
+                    }
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        selected_algo = st.selectbox(
+                            "Select algorithm", 
+                            list(algo_options.keys()),
+                            key="custom_algo_select"
+                        )
+                        algo_key = algo_options[selected_algo]
+                    
+                    with col2:
+                        is_classification = st.checkbox(
+                            "Classification problem", 
+                            value=st.session_state.get('is_classification', False),
+                            key="custom_is_classification"
+                        )
+                        use_cv = st.checkbox("Use cross-validation", key="custom_cv")
+                    
+                    # Algorithm parameters
+                    st.subheader("Algorithm Parameters")
+                    algo_params = {}
+                    
+                    if algo_key == "linear":
+                        # No specific parameters for linear regression
+                        pass
+                    elif algo_key == "logistic":
+                        algo_params['lr'] = st.slider("Learning rate", 0.001, 1.0, 0.01, 0.001, key="custom_lr")
+                    elif algo_key in ["dtree", "rf"]:
+                        algo_params['depth'] = st.slider("Max depth", 1, 20, 3, 1, key="custom_depth")
+                        if algo_key == "rf":
+                            algo_params['n_estimators'] = st.slider("Number of estimators", 1, 100, 10, 1, key="custom_n_est")
+                    elif algo_key == "svm":
+                        algo_params['kernel'] = st.selectbox("Kernel", ["linear", "poly", "rbf", "sigmoid"], key="custom_kernel")
+                    elif algo_key == "kmeans":
+                        algo_params['k'] = st.slider("Number of clusters", 2, 10, 3, 1, key="custom_k")
+                    elif algo_key == "dbscan":
+                        algo_params['eps'] = st.slider("Epsilon", 0.1, 2.0, 0.5, 0.1, key="custom_eps")
+                        algo_params['min_samples'] = st.slider("Min samples", 2, 20, 5, 1, key="custom_min_samples")
+                    elif algo_key == "pca":
+                        max_components = min(10, len(selected_features))
+                        algo_params['n_components'] = st.slider("Number of components", 1, max_components, 2, 1, key="custom_n_comp")
+                    
+                    # Input values for prediction
+                    st.subheader("Enter Values for Prediction")
+                    custom_input_values = {}
+                    
+                    for feature in all_features:
+                        # Only show input fields for selected features
+                        if feature in selected_features:
+                            # Check if feature is categorical
+                            is_categorical = feature in st.session_state.data_types.get('categorical', [])
+                            
+                            if is_categorical:
+                                # For categorical features, show a dropdown
+                                unique_values = st.session_state.data[feature].unique().tolist()
+                                input_val = st.selectbox(f"Select value for {feature}", unique_values, key=f"custom_{feature}")
+                            else:
+                                # For numeric features, show a number input
+                                input_val = st.number_input(
+                                    f"Enter value for {feature}", 
+                                    value=float(st.session_state.X[feature].mean()),
+                                    key=f"custom_pred_{feature}"
+                                )
+                            
+                            custom_input_values[feature] = input_val
+                    
+                    # Create DataFrame with input values
+                    custom_input_df = pd.DataFrame([custom_input_values])
+                    
+                    # Train and predict button
+                    if st.button("Train and Predict", key="train_predict_btn"):
+                        try:
+                            with st.spinner("Training model and making prediction..."):
+                                # Call the train_and_predict function
+                                result = train_and_predict(
+                                    st.session_state.X,
+                                    st.session_state.y,
+                                    custom_input_df,
+                                    features=selected_features,
+                                    algo=algo_key,
+                                    algo_params=algo_params,
+                                    is_classification=is_classification,
+                                    cv=use_cv
+                                )
+                                
+                                # Display metrics
+                                st.success("Training and prediction completed!")
+                                
+                                st.subheader("Model Metrics")
+                                metrics = result['metrics']
+                                
+                                # Display metrics based on algorithm type
+                                if algo_key in ["linear", "dtree", "rf", "svm"] and not is_classification:
+                                    st.write(f"MSE: {metrics.get('mse', 'N/A')}")
+                                    st.write(f"R²: {metrics.get('r2', 'N/A')}")
+                                    
+                                    if use_cv:
+                                        st.write(f"CV MSE: {metrics.get('cv_mse', 'N/A')}")
+                                        st.write(f"CV R²: {metrics.get('cv_r2', 'N/A')}")
+                                        
+                                elif algo_key in ["logistic", "dtree", "rf", "svm"] and is_classification:
+                                    st.write(f"Accuracy: {metrics.get('accuracy', 'N/A')}")
+                                    
+                                    if use_cv:
+                                        st.write(f"CV Accuracy: {metrics.get('cv_accuracy', 'N/A')}")
+                                        
+                                elif algo_key in ["kmeans", "dbscan"]:
+                                    if 'silhouette' in metrics:
+                                        st.write(f"Silhouette Score: {metrics['silhouette']}")
+                                    if 'n_clusters' in metrics:
+                                        st.write(f"Number of Clusters: {metrics['n_clusters']}")
+                                        
+                                elif algo_key == "pca":
+                                    if 'explained_variance' in metrics:
+                                        st.write("Explained Variance Ratio:")
+                                        for i, var in enumerate(metrics['explained_variance']):
+                                            st.write(f"PC{i+1}: {var:.4f}")
+                                        st.write(f"Total Explained Variance: {metrics.get('total_explained_variance', 'N/A')}")
+                                
+                                # Display prediction result
+                                st.subheader("Prediction Result")
+                                prediction_result = result['prediction']
+                                
+                                if isinstance(prediction_result, dict):
+                                    if 'class' in prediction_result:
+                                        st.write(f"### Predicted Class: {prediction_result['class']}")
+                                        
+                                        if 'probabilities' in prediction_result:
+                                            st.write("#### Class Probabilities:")
+                                            for class_label, prob in prediction_result['probabilities'].items():
+                                                st.write(f"{class_label}: {prob}")
+                                    elif 'value' in prediction_result:
+                                        st.write(f"### Predicted Value: {prediction_result['value']:.4f}")
+                                else:
+                                    st.write(f"### {prediction_result}")
+                                
+                        except Exception as e:
+                            error_msg = str(e)
+                            if isinstance(e, MLInsightException):
+                                st.error(f"Error: {e.message}")
+                                if e.details:
+                                    st.error(f"Details: {e.details}")
+                            else:
+                                st.error(f"Error in train and predict: {error_msg}")
+                            logging.error(f"Train and predict error: {error_msg}")
+                            logging.error(traceback.format_exc())
 
     # Footer
     st.markdown("---")
